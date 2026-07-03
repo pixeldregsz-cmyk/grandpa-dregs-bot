@@ -1,0 +1,1103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Poor Ass AI — Build a Free AI Bot From Your Phone</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:#0a0a0a;color:#e0e0e0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.6}
+.container{max-width:720px;margin:0 auto;padding:20px}
+.hero{text-align:center;padding:60px 20px 40px;background:linear-gradient(135deg,#0a0a0a 0%,#1a1a2e 50%,#0a0a0a 100%);border-bottom:2px solid #2563eb}
+.hero h1{font-size:36px;font-weight:800;color:#fff;margin-bottom:8px;letter-spacing:-1px}
+.hero .tagline{font-size:18px;color:#4ade80;margin-bottom:16px;font-weight:600}
+.hero p{font-size:15px;color:#888;max-width:480px;margin:0 auto;line-height:1.6}
+.badge{display:inline-block;background:#2563eb;color:#fff;padding:4px 12px;border-radius:20px;font-size:12px;font-weight:700;margin-bottom:16px;letter-spacing:0.5px}
+.section{padding:32px 0;border-bottom:1px solid #1a1a1a}
+.section:last-child{border-bottom:none}
+h2{font-size:22px;font-weight:700;color:#fff;margin-bottom:16px;display:flex;align-items:center;gap:10px}
+h2 .icon{font-size:28px}
+h3{font-size:17px;font-weight:600;color:#4ade80;margin:20px 0 10px}
+p{font-size:15px;color:#aaa;margin-bottom:12px;line-height:1.7}
+.step-num{display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;background:#2563eb;color:#fff;border-radius:50%;font-size:14px;font-weight:700;flex-shrink:0}
+ol{padding-left:20px;margin:12px 0}
+ol li,ul li{padding:6px 0;font-size:15px;color:#ccc;line-height:1.6}
+ul{padding-left:20px;margin:12px 0}
+.tip{background:#1a1a2e;border:1px solid #2563eb33;border-radius:10px;padding:14px 16px;font-size:14px;color:#aaa;line-height:1.5;margin:16px 0}
+.tip strong{color:#4ade80}
+.warning{background:#2e1a1a;border:1px solid #eb2525;border-radius:10px;padding:14px 16px;font-size:14px;color:#ffaaaa;line-height:1.5;margin:16px 0}
+.warning strong{color:#ff6b6b}
+.code-block{background:#111;border-radius:12px;overflow:hidden;margin:16px 0;border:1px solid #222}
+.code-header{display:flex;justify-content:space-between;align-items:center;padding:10px 16px;background:#1a1a1a;border-bottom:1px solid #222}
+.code-lang{font-size:12px;color:#888;text-transform:uppercase;letter-spacing:0.5px}
+pre{padding:16px;margin:0;overflow-x:auto;font-size:13px;line-height:1.6;color:#e0e0e0;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;white-space:pre;word-break:break-word}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:14px 24px;border-radius:12px;font-size:15px;font-weight:600;cursor:pointer;border:none;transition:all 0.2s;text-decoration:none}
+.btn-primary{background:#2563eb;color:#fff}
+.btn-primary:active{background:#1d4ed8;transform:scale(0.98)}
+.btn-outline{background:transparent;color:#2563eb;border:2px solid #2563eb}
+.btn-outline:active{background:#2563eb22;transform:scale(0.98)}
+.btn-success{background:#16a34a;color:#fff}
+.btn-success:active{background:#15803d;transform:scale(0.98)}
+.btn-group{display:flex;flex-wrap:wrap;gap:10px;margin:16px 0}
+.file-card{background:#111;border:1px solid #222;border-radius:12px;padding:16px;margin:10px 0;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.file-info{flex:1;min-width:0}
+.file-name{font-size:15px;font-weight:600;color:#fff;font-family:ui-monospace,monospace}
+.file-desc{font-size:13px;color:#888;margin-top:2px}
+.download-btn{background:#2563eb;color:#fff;border:none;border-radius:8px;padding:10px 18px;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;flex-shrink:0}
+.download-btn:active{background:#1d4ed8}
+.download-all{text-align:center;padding:40px 20px}
+.download-all .btn{font-size:18px;padding:18px 36px;border-radius:16px}
+.checklist{list-style:none;padding:0}
+.checklist li{padding:8px 0;font-size:15px;color:#ccc;display:flex;align-items:flex-start;gap:10px}
+.checklist li::before{content:"✓";color:#4ade80;font-weight:700;flex-shrink:0;margin-top:1px}
+.requirements{display:grid;grid-template-columns:1fr;gap:12px;margin:16px 0}
+.req-card{background:#111;border:1px solid #222;border-radius:12px;padding:16px}
+.req-card .req-title{font-size:15px;font-weight:600;color:#fff;margin-bottom:4px}
+.req-card .req-desc{font-size:13px;color:#888}
+.footer{text-align:center;padding:40px 20px;color:#555;font-size:13px}
+@media(min-width:480px){.requirements{grid-template-columns:1fr 1fr}}
+.toc{background:#111;border:1px solid #222;border-radius:12px;padding:20px;margin:20px 0}
+.toc h3{margin-top:0;color:#fff}
+.toc ol{padding-left:20px}
+.toc a{color:#4ade80;text-decoration:none;font-size:14px}
+.toc a:hover{text-decoration:underline}
+.toc li{padding:4px 0;font-size:14px}
+</style>
+</head>
+<body>
+
+<div class="hero">
+<div class="badge">FREE • NO COMPUTER NEEDED • NO API KEYS</div>
+<h1>Poor Ass AI</h1>
+<div class="tagline">Build a Free AI Bot From Your Phone</div>
+<p>A step-by-step guide to creating a fully autonomous AI Telegram bot with persistent memory, full server access, and 24/7 hosting — all for $0. Built entirely from an iPhone. No laptop. No API keys. No coding experience needed.</p>
+</div>
+
+<div class="container">
+
+<div class="toc">
+<h3>Table of Contents</h3>
+<ol>
+<li><a href="#what">What You're Building</a></li>
+<li><a href="#need">What You Need</a></li>
+<li><a href="#step1">Create a Telegram Bot</a></li>
+<li><a href="#step2">Create a Fly.io Account</a></li>
+<li><a href="#step3">Create a GitHub Account & Repo</a></li>
+<li><a href="#step4">Download & Upload the Bot Files</a></li>
+<li><a href="#step5">Deploy to Fly.io</a></li>
+<li><a href="#step6">Set Your Secrets</a></li>
+<li><a href="#step7">Test Your Bot</a></li>
+<li><a href="#customize">Customize Your Bot</a></li>
+<li><a href="#manage">Managing Your Bot</a></li>
+</ol>
+</div>
+
+<!-- WHAT YOU'RE BUILDING -->
+<div class="section" id="what">
+<h2><span class="icon">🤖</span> What You're Building</h2>
+<p>A fully autonomous AI-powered Telegram bot that:</p>
+<ul class="checklist">
+<li>Runs 24/7 on Fly.io's free tier ($0/month)</li>
+<li>Has a customizable personality (edit one file)</li>
+<li>Remembers conversations across reboots (persistent SQLite memory)</li>
+<li>Can run shell commands, Python code, and make HTTP requests</li>
+<li>Can search the web, download files, and send files to users</li>
+<li>Auto-restarts if it crashes</li>
+<li>Uses free AI from OpenGateway (no API key needed)</li>
+</ul>
+<p>This is the same process that was used to build Grandpa Dregs — a live AI bot running on Telegram right now. Built entirely from an iPhone with no computer, no terminal, and no copy-paste.</p>
+</div>
+
+<!-- WHAT YOU NEED -->
+<div class="section" id="need">
+<h2><span class="icon">📋</span> What You Need</h2>
+<div class="requirements">
+<div class="req-card">
+<div class="req-title">📱 iPhone or Android</div>
+<div class="req-desc">That's it for hardware. No computer needed.</div>
+</div>
+<div class="req-card">
+<div class="req-title">💬 Telegram (free)</div>
+<div class="req-desc">Download from the App Store if you don't have it.</div>
+</div>
+<div class="req-card">
+<div class="req-title">🐙 GitHub Account (free)</div>
+<div class="req-desc">To store your bot code. Sign up at github.com.</div>
+</div>
+<div class="req-card">
+<div class="req-title">✈️ Fly.io Account (free)</div>
+<div class="req-desc">To host your bot 24/7. Needs a credit card for verification but never charges.</div>
+</div>
+</div>
+<p><strong>Time needed:</strong> About 20–30 minutes from start to finish.</p>
+<p><strong>Cost:</strong> $0. Forever.</p>
+</div>
+
+<!-- STEP 1 -->
+<div class="section" id="step1">
+<h2><span class="step-num">1</span> Create a Telegram Bot</h2>
+<ol>
+<li>Open <strong>Telegram</strong> on your phone</li>
+<li>Search for <strong>@BotFather</strong> and open the chat</li>
+<li>Send <code>/newbot</code></li>
+<li>Choose a <strong>display name</strong> for your bot (e.g., "My AI Buddy")</li>
+<li>Choose a <strong>username</strong> that ends in "bot" (e.g., myaibuddy_bot)</li>
+<li>BotFather will give you a <strong>bot token</strong> — it looks like:<br><code>123456789:ABCdefGHIjklMNOpqrsTUVwxyz</code></li>
+<li><strong>Save this token</strong> — you'll need it later. Don't share it with anyone.</li>
+</ol>
+<div class="tip"><strong>💡 Tip:</strong> You can message your bot right now to make sure it exists. It won't respond yet — that's expected.</div>
+</div>
+
+<!-- STEP 2 -->
+<div class="section" id="step2">
+<h2><span class="step-num">2</span> Create a Fly.io Account</h2>
+<ol>
+<li>Open <strong>Safari</strong> on your phone</li>
+<li>Go to <strong>https://fly.io</strong></li>
+<li>Tap <strong>"Sign Up"</strong> or <strong>"Get Started"</strong></li>
+<li>Create an account with your email</li>
+<li>You'll need to add a <strong>credit card</strong> for verification — this is just to prevent abuse. <strong>You will NOT be charged.</strong> The free tier covers everything we need.</li>
+<li>Once signed in, you should see your Fly.io dashboard</li>
+</ol>
+<div class="tip"><strong>💡 Tip:</strong> Fly.io's free tier gives you 3 shared VMs and 3GB of storage. Our bot uses 1 VM and 1GB. You're nowhere near the limit.</div>
+</div>
+
+<!-- STEP 3 -->
+<div class="section" id="step3">
+<h2><span class="step-num">3</span> Create a GitHub Account & Repo</h2>
+<ol>
+<li>Go to <strong>https://github.com</strong> in Safari</li>
+<li>Sign up for a free account if you don't have one</li>
+<li>Once logged in, tap the <strong>+</strong> icon (top right) → <strong>"New repository"</strong></li>
+<li>Name it something like <code>my-ai-bot</code></li>
+<li>Keep it <strong>Public</strong> (easier for Fly.io to access)</li>
+<li>Check <strong>"Add a README file"</strong></li>
+<li>Tap <strong>"Create repository"</strong></li>
+</ol>
+<p>You now have a place to store your bot code. Next, we'll add the files.</p>
+</div>
+
+<!-- STEP 4 -->
+<div class="section" id="step4">
+<h2><span class="step-num">4</span> Download & Upload the Bot Files</h2>
+<p>Download each file below, then upload them to your GitHub repo.</p>
+
+<h3>How to upload files to GitHub (on iPhone):</h3>
+<ol>
+<li>Open your repo in Safari (e.g., github.com/YOUR-NAME/my-ai-bot)</li>
+<li>Tap <strong>"Add file"</strong> → <strong>"Upload files"</strong></li>
+<li>Tap <strong>"Choose files"</strong> and select the file from your Downloads</li>
+<li>Tap <strong>"Commit changes"</strong></li>
+<li>Repeat for each file</li>
+</ol>
+
+<h3>Files to download:</h3>
+
+<div class="file-card">
+<div class="file-info">
+<div class="file-name">bot.py</div>
+<div class="file-desc">The main bot code — the brain with 9 tools</div>
+</div>
+<button class="download-btn" onclick="downloadFile('bot.py', BOT_PY)">Download</button>
+</div>
+
+<div class="file-card">
+<div class="file-info">
+<div class="file-name">soul.md</div>
+<div class="file-desc">Your bot's personality — edit this to change who it is</div>
+</div>
+<button class="download-btn" onclick="downloadFile('soul.md', SOUL_MD)">Download</button>
+</div>
+
+<div class="file-card">
+<div class="file-info">
+<div class="file-name">requirements.txt</div>
+<div class="file-desc">Python dependencies</div>
+</div>
+<button class="download-btn" onclick="downloadFile('requirements.txt', REQUIREMENTS)">Download</button>
+</div>
+
+<div class="file-card">
+<div class="file-info">
+<div class="file-name">Dockerfile</div>
+<div class="file-desc">Container build config</div>
+</div>
+<button class="download-btn" onclick="downloadFile('Dockerfile', DOCKERFILE)">Download</button>
+</div>
+
+<div class="file-card">
+<div class="file-info">
+<div class="file-name">fly.toml</div>
+<div class="file-desc">Fly.io deployment config</div>
+</div>
+<button class="download-btn" onclick="downloadFile('fly.toml', FLY_TOML)">Download</button>
+</div>
+
+<div class="tip"><strong>💡 Tip:</strong> Download all 5 files before uploading. Then upload them one at a time to GitHub. Make sure the filenames are exact — lowercase, with the right extensions.</div>
+</div>
+
+<!-- STEP 5 -->
+<div class="section" id="step5">
+<h2><span class="step-num">5</span> Deploy to Fly.io</h2>
+<ol>
+<li>Go to <strong>https://fly.io</strong> and log in</li>
+<li>Tap <strong>"Launch"</strong> or <strong>"Create App"</strong> from the dashboard</li>
+<li>Select <strong>"GitHub"</strong> as the source</li>
+<li>Connect your GitHub account if prompted</li>
+<li>Select the repo you created (e.g., <code>my-ai-bot</code>)</li>
+<li>Fly.io will detect the <code>Dockerfile</code> and <code>fly.toml</code> automatically</li>
+<li>Choose a name for your app (e.g., <code>my-ai-bot</code>)</li>
+<li>Select a region close to you (e.g., <code>iad</code> for US East)</li>
+<li><strong>Before deploying</strong>, you need to set secrets (next step)</li>
+</ol>
+<div class="warning"><strong>⚠️ Important:</strong> Don't deploy yet! You need to set your Telegram token first (next step).</div>
+</div>
+
+<!-- STEP 6 -->
+<div class="section" id="step6">
+<h2><span class="step-num">6</span> Set Your Secrets</h2>
+<p>Go to your app's dashboard on Fly.io and set these environment variables (secrets):</p>
+
+<div class="code-block">
+<div class="code-header"><span class="code-lang">Secrets to set</span></div>
+<pre>TELEGRAM_TOKEN = [your bot token from Step 1]
+
+That's it! The AI API is already configured (free, no key needed).</pre>
+</div>
+
+<h3>How to set secrets on Fly.io (iPhone):</h3>
+<ol>
+<li>Go to your app's dashboard on Fly.io</li>
+<li>Find <strong>"Secrets"</strong> in the sidebar or menu</li>
+<li>Tap <strong>"Add secret"</strong></li>
+<li>Set <code>TELEGRAM_TOKEN</code> to your bot token from Step 1</li>
+<li>Save</li>
+</ol>
+
+<h3>Create a storage volume:</h3>
+<ol>
+<li>In your app's dashboard, find <strong>"Volumes"</strong></li>
+<li>Tap <strong>"Create volume"</strong></li>
+<li>Name: <code>bot_memory</code></li>
+<li>Size: <strong>1 GB</strong></li>
+<li>Region: same as your app</li>
+<li>Create it</li>
+</ol>
+
+<p>Now tap <strong>"Deploy"</strong> to launch your bot!</p>
+</div>
+
+<!-- STEP 7 -->
+<div class="section" id="step7">
+<h2><span class="step-num">7</span> Test Your Bot</h2>
+<ol>
+<li>Open <strong>Telegram</strong></li>
+<li>Search for your bot by its username (e.g., <code>@myaibuddy_bot</code>)</li>
+<li>Send <code>/start</code></li>
+<li>It should respond with a welcome message</li>
+</ol>
+
+<h3>Try these:</h3>
+<ul>
+<li><code>Who are you?</code> — tests personality</li>
+<li><code>Run whoami on the server</code> — tests shell access</li>
+<li><code>What's the latest news about AI?</code> — tests web search</li>
+<li><code>Calculate the first 20 prime numbers</code> — tests Python</li>
+<li><code>/remember My name is [your name]</code> — tests memory</li>
+</ul>
+
+<div class="tip"><strong>💡 Tip:</strong> If the bot doesn't respond, check the logs in your Fly.io dashboard. Look for "Logs" in the sidebar. Common issues: wrong Telegram token, or the volume isn't mounted.</div>
+
+<h2><span class="icon">🎉</span> You're Live!</h2>
+<p>Your AI bot is now running 24/7 for free on Fly.io. It will keep running whether you close your phone, turn off Safari, or go to sleep.</p>
+</div>
+
+<!-- CUSTOMIZE -->
+<div class="section" id="customize">
+<h2><span class="icon">✨</span> Customize Your Bot</h2>
+
+<h3>Change the personality</h3>
+<p>Edit <code>soul.md</code> in your GitHub repo. This is your bot's entire personality. You can make it:</p>
+<ul>
+<li>A pirate captain who codes</li>
+<li>A zen master chef</li>
+<li>A sarcastic librarian</li>
+<li>A Starfleet veteran</li>
+<li>Whatever you want</li>
+</ul>
+<p>After editing, go to Fly.io and deploy again to pick up the changes.</p>
+
+<h3>Change the AI model</h3>
+<p>In your <code>fly.toml</code>, you can change the model:</p>
+<div class="code-block">
+<div class="code-header"><span class="code-lang">fly.toml</span></div>
+<pre>[env]
+  MODEL = "mimo-v2.5-pro"</pre>
+</div>
+
+<h3>Add new tools</h3>
+<p>Edit <code>bot.py</code> to add new capabilities. The bot uses OpenAI-compatible function calling, so you can add any tool you can write in Python.</p>
+</div>
+
+<!-- MANAGE -->
+<div class="section" id="manage">
+<h2><span class="icon">🔧</span> Managing Your Bot</h2>
+
+<h3>View logs</h3>
+<p>Go to your app on Fly.io → <strong>"Logs"</strong> in the sidebar. You'll see every message, tool call, and error.</p>
+
+<h3>Restart</h3>
+<p>Go to your app → <strong>"Machines"</strong> → tap your machine → <strong>"Restart"</strong></p>
+
+<h3>Update the bot</h3>
+<ol>
+<li>Edit files on GitHub</li>
+<li>Go to Fly.io → your app → <strong>"Deploy"</strong></li>
+<li>It'll rebuild and restart automatically</li>
+</ol>
+
+<h3>Delete everything</h3>
+<p>Go to your app on Fly.io → <strong>"Settings"</strong> → <strong>"Delete app"</strong></p>
+</div>
+
+<!-- DOWNLOAD ALL -->
+<div class="section download-all">
+<h2><span class="icon">📦</span> Download Everything</h2>
+<p>Want all the files in one zip? Tap below.</p>
+<div class="btn-group" style="justify-content:center">
+<button class="btn btn-primary" onclick="downloadAll()">Download All Files (.zip)</button>
+</div>
+</div>
+
+<!-- ABOUT -->
+<div class="section">
+<h2><span class="icon">💡</span> About This Project</h2>
+<p><strong>Poor Ass AI</strong> was born from a simple idea: you shouldn't need a computer, a CS degree, or an API budget to build an AI agent.</p>
+<p>This entire project — from idea to live bot — was built in a single conversation between a person on an iPhone and an AI assistant. No laptop. No terminal. No copy-paste. Just tapping on a phone screen.</p>
+<p>The bot uses <strong>OpenGateway</strong> (a free AI API) for its brain, <strong>Fly.io</strong> for 24/7 hosting, and <strong>Telegram</strong> as the interface. Total cost: $0.</p>
+<p>If we can do it, you can do it.</p>
+</div>
+
+<div class="footer">
+<p>Poor Ass AI — Build a Free AI Bot From Your Phone</p>
+<p>Free forever. No API keys. No computer needed.</p>
+<p style="margin-top:12px;color:#333">Built with stubbornness and an iPhone.</p>
+</div>
+
+</div>
+
+<script>
+// ===========================
+// EMBEDDED FILE CONTENTS
+// ===========================
+
+const BOT_PY = `#!/usr/bin/env python3
+"""AI Telegram Bot — full-powered agent with shell, HTTP, code exec, file ops."""
+
+import os
+import json
+import logging
+import sqlite3
+import subprocess
+import urllib.request
+import urllib.parse
+from pathlib import Path
+from datetime import datetime, timezone
+
+from openai import OpenAI
+from telegram import Update
+from telegram.ext import (
+    ApplicationBuilder,
+    CommandHandler,
+    MessageHandler,
+    ContextTypes,
+    filters,
+)
+
+# --- Config ---
+TELEGRAM_TOKEN = os.environ.get("TELEGRAM_TOKEN", "")
+OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY", "ogw_live_ca8d7717e42b7f665c5c919205b42aa0")
+OPENAI_BASE_URL = os.environ.get("OPENAI_BASE_URL", "https://opengateway.gitlawb.com/v1")
+MODEL = os.environ.get("MODEL", "mimo-v2.5-pro")
+SOUL_PATH = Path(__file__).parent / "soul.md"
+DATA_DIR = Path(os.environ.get("DATA_DIR", "/data"))
+DB_PATH = DATA_DIR / "memory.db"
+WORKSPACE = Path(os.environ.get("WORKSPACE", "/data/workspace"))
+
+# --- Logging ---
+logging.basicConfig(
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    level=logging.INFO,
+)
+logger = logging.getLogger(__name__)
+
+# --- Load soul ---
+SYSTEM_PROMPT = SOUL_PATH.read_text() if SOUL_PATH.exists() else "You are a helpful AI assistant."
+
+# --- OpenAI-compatible client ---
+client = OpenAI(api_key=OPENAI_API_KEY, base_url=OPENAI_BASE_URL)
+
+# --- Persistent memory ---
+MAX_HISTORY = 40
+
+
+def init_db():
+    DATA_DIR.mkdir(parents=True, exist_ok=True)
+    WORKSPACE.mkdir(parents=True, exist_ok=True)
+    conn = sqlite3.connect(str(DB_PATH))
+    conn.execute("""
+        CREATE TABLE IF NOT EXISTS conversations (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            chat_id INTEGER NOT NULL,
+            role TEXT NOT NULL,
+            content TEXT NOT NULL,
+            timestamp TEXT NOT NULL
+        )
+    """)
+    conn.execute("""
+        CREATE TABLE IF NOT EXISTS user_profiles (
+            chat_id INTEGER PRIMARY KEY,
+            username TEXT,
+            first_seen TEXT,
+            last_seen TEXT,
+            notes TEXT
+        )
+    """)
+    conn.commit()
+    conn.close()
+    logger.info(f"Database initialized at {DB_PATH}")
+
+
+def get_history(chat_id):
+    conn = sqlite3.connect(str(DB_PATH))
+    rows = conn.execute(
+        "SELECT role, content FROM conversations WHERE chat_id = ? ORDER BY id DESC LIMIT ?",
+        (chat_id, MAX_HISTORY),
+    ).fetchall()
+    conn.close()
+    return [{"role": role, "content": content} for role, content in reversed(rows)]
+
+
+def add_message(chat_id, role, content, username=None):
+    conn = sqlite3.connect(str(DB_PATH))
+    now = datetime.now(timezone.utc).isoformat()
+    conn.execute(
+        "INSERT INTO conversations (chat_id, role, content, timestamp) VALUES (?, ?, ?, ?)",
+        (chat_id, role, content, now),
+    )
+    conn.execute(
+        """DELETE FROM conversations WHERE chat_id = ? AND id NOT IN (
+            SELECT id FROM conversations WHERE chat_id = ? ORDER BY id DESC LIMIT ?
+        )""",
+        (chat_id, chat_id, MAX_HISTORY),
+    )
+    if username:
+        conn.execute(
+            """INSERT INTO user_profiles (chat_id, username, first_seen, last_seen)
+               VALUES (?, ?, ?, ?)
+               ON CONFLICT(chat_id) DO UPDATE SET last_seen = ?, username = ?""",
+            (chat_id, username, now, now, now, username),
+        )
+    else:
+        conn.execute(
+            """UPDATE user_profiles SET last_seen = ? WHERE chat_id = ?""",
+            (now, chat_id),
+        )
+    conn.commit()
+    conn.close()
+
+
+def get_user_notes(chat_id):
+    conn = sqlite3.connect(str(DB_PATH))
+    row = conn.execute(
+        "SELECT notes FROM user_profiles WHERE chat_id = ?", (chat_id,)
+    ).fetchone()
+    conn.close()
+    return row[0] if row and row[0] else ""
+
+
+def save_user_note(chat_id, note):
+    conn = sqlite3.connect(str(DB_PATH))
+    existing = conn.execute(
+        "SELECT notes FROM user_profiles WHERE chat_id = ?", (chat_id,)
+    ).fetchone()
+    old_notes = existing[0] if existing and existing[0] else ""
+    new_notes = f"{old_notes}\\n- {note}".strip() if old_notes else f"- {note}"
+    conn.execute(
+        """INSERT INTO user_profiles (chat_id, notes) VALUES (?, ?)
+           ON CONFLICT(chat_id) DO UPDATE SET notes = ?""",
+        (chat_id, new_notes, new_notes),
+    )
+    conn.commit()
+    conn.close()
+
+
+# ===========================
+# TOOLS
+# ===========================
+
+TOOLS = [
+    {
+        "type": "function",
+        "function": {
+            "name": "run_shell",
+            "description": "Execute ANY shell command. Full system access.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "command": {"type": "string", "description": "The shell command to execute"}
+                },
+                "required": ["command"],
+            },
+        },
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "run_python",
+            "description": "Execute Python code.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "code": {"type": "string", "description": "Python code to execute"}
+                },
+                "required": ["code"],
+            },
+        },
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "http_request",
+            "description": "Make an HTTP request. Supports GET, POST, PUT, DELETE with custom headers and body.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "url": {"type": "string", "description": "The URL to request"},
+                    "method": {"type": "string", "description": "HTTP method", "default": "GET"},
+                    "headers": {"type": "object", "description": "HTTP headers"},
+                    "body": {"type": "string", "description": "Request body"},
+                },
+                "required": ["url"],
+            },
+        },
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "web_search",
+            "description": "Search the web using DuckDuckGo.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "query": {"type": "string", "description": "Search query"}
+                },
+                "required": ["query"],
+            },
+        },
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "save_file",
+            "description": "Save content to a file in the workspace.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "filename": {"type": "string", "description": "File path relative to workspace"},
+                    "content": {"type": "string", "description": "Content to write"},
+                },
+                "required": ["filename", "content"],
+            },
+        },
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "read_file",
+            "description": "Read a file from the workspace or any path.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "filepath": {"type": "string", "description": "File path to read"}
+                },
+                "required": ["filepath"],
+            },
+        },
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "list_files",
+            "description": "List files and directories at a path.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "path": {"type": "string", "description": "Directory path", "default": "."}
+                },
+            },
+        },
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "send_file_to_user",
+            "description": "Send a file to the user via Telegram.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "filepath": {"type": "string", "description": "Path to the file"},
+                    "caption": {"type": "string", "description": "Optional caption"},
+                },
+                "required": ["filepath"],
+            },
+        },
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "download_file",
+            "description": "Download a file from a URL to the workspace.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "url": {"type": "string", "description": "URL to download from"},
+                    "filename": {"type": "string", "description": "Filename to save as"},
+                },
+                "required": ["url", "filename"],
+            },
+        },
+    },
+]
+
+
+def tool_run_shell(command):
+    try:
+        result = subprocess.run(
+            command, shell=True,
+            capture_output=True, text=True, timeout=60,
+            cwd=str(WORKSPACE),
+            env={**os.environ, "HOME": str(WORKSPACE)},
+        )
+        output = ""
+        if result.stdout:
+            output += result.stdout
+        if result.stderr:
+            output += f"\\n[stderr]\\n{result.stderr}"
+        if result.returncode != 0:
+            output += f"\\n[exit code: {result.returncode}]"
+        return output[:5000] if output else f"[exit code: {result.returncode}] (no output)"
+    except subprocess.TimeoutExpired:
+        return "Error: Command timed out (60s limit)"
+    except Exception as e:
+        return f"Shell error: {str(e)}"
+
+
+def tool_run_python(code):
+    try:
+        result = subprocess.run(
+            ["python3", "-c", code],
+            capture_output=True, text=True, timeout=60,
+            cwd=str(WORKSPACE),
+            env={**os.environ, "HOME": str(WORKSPACE)},
+        )
+        output = ""
+        if result.stdout:
+            output += result.stdout
+        if result.stderr:
+            output += f"\\n[stderr]\\n{result.stderr}"
+        return output[:5000] if output else "(No output)"
+    except subprocess.TimeoutExpired:
+        return "Error: Code timed out (60s limit)"
+    except Exception as e:
+        return f"Python error: {str(e)}"
+
+
+def tool_http_request(url, method="GET", headers=None, body=None):
+    try:
+        req = urllib.request.Request(url, method=method.upper())
+        req.add_header("User-Agent", "AIBot/1.0")
+        if headers:
+            for k, v in headers.items():
+                req.add_header(k, v)
+        if body:
+            req.data = body.encode("utf-8") if isinstance(body, str) else body
+        with urllib.request.urlopen(req, timeout=15) as resp:
+            content = resp.read(10000).decode("utf-8", errors="replace")
+            return f"[HTTP {resp.status}]\\n{content[:5000]}"
+    except urllib.error.HTTPError as e:
+        return f"[HTTP {e.code}] {e.reason}"
+    except Exception as e:
+        return f"HTTP error: {str(e)}"
+
+
+def tool_web_search(query):
+    try:
+        url = f"https://api.duckduckgo.com/?q={urllib.parse.quote(query)}&format=json&no_html=1"
+        req = urllib.request.Request(url, headers={"User-Agent": "AIBot/1.0"})
+        with urllib.request.urlopen(req, timeout=10) as resp:
+            data = json.loads(resp.read())
+        results = []
+        if data.get("AbstractText"):
+            results.append(f"**Summary:** {data['AbstractText']}")
+        if data.get("AbstractURL"):
+            results.append(f"**Source:** {data['AbstractURL']}")
+        for topic in data.get("RelatedTopics", [])[:8]:
+            if isinstance(topic, dict) and topic.get("Text"):
+                results.append(f"- {topic['Text']}")
+        return "\\n".join(results) if results else f"No results for '{query}'."
+    except Exception as e:
+        return f"Search error: {str(e)}"
+
+
+def tool_save_file(filename, content):
+    try:
+        filepath = WORKSPACE / filename
+        filepath.parent.mkdir(parents=True, exist_ok=True)
+        filepath.write_text(content)
+        return f"Saved '{filename}' ({len(content)} bytes)"
+    except Exception as e:
+        return f"Save error: {str(e)}"
+
+
+def tool_read_file(filepath):
+    try:
+        p = Path(filepath) if filepath.startswith("/") else WORKSPACE / filepath
+        if not p.exists():
+            return f"File '{filepath}' not found"
+        return p.read_text()[:5000]
+    except Exception as e:
+        return f"Read error: {str(e)}"
+
+
+def tool_list_files(path="."):
+    try:
+        p = Path(path) if path.startswith("/") else WORKSPACE / path
+        if not p.exists():
+            return f"Path '{path}' not found"
+        if p.is_file():
+            return f"{p.name} ({p.stat().st_size} bytes)"
+        entries = []
+        for f in sorted(p.iterdir()):
+            prefix = "DIR" if f.is_dir() else "FILE"
+            size = f"{f.stat().st_size} bytes" if f.is_file() else ""
+            entries.append(f"[{prefix}] {f.name} {size}")
+        return "\\n".join(entries) if entries else "Empty directory"
+    except Exception as e:
+        return f"List error: {str(e)}"
+
+
+def tool_send_file_to_user(filepath, caption=""):
+    try:
+        p = Path(filepath) if filepath.startswith("/") else WORKSPACE / filepath
+        if not p.exists():
+            return f"File '{filepath}' not found"
+        return f"__SEND_FILE__{p}__{caption}"
+    except Exception as e:
+        return f"Send error: {str(e)}"
+
+
+def tool_download_file(url, filename):
+    try:
+        filepath = WORKSPACE / filename
+        filepath.parent.mkdir(parents=True, exist_ok=True)
+        req = urllib.request.Request(url, headers={"User-Agent": "AIBot/1.0"})
+        with urllib.request.urlopen(req, timeout=30) as resp:
+            data = resp.read()
+        filepath.write_bytes(data)
+        return f"Downloaded '{filename}' ({len(data)} bytes)"
+    except Exception as e:
+        return f"Download error: {str(e)}"
+
+
+TOOL_MAP = {
+    "run_shell": tool_run_shell,
+    "run_python": tool_run_python,
+    "http_request": tool_http_request,
+    "web_search": tool_web_search,
+    "save_file": tool_save_file,
+    "read_file": tool_read_file,
+    "list_files": tool_list_files,
+    "send_file_to_user": tool_send_file_to_user,
+    "download_file": tool_download_file,
+}
+
+
+def execute_tool(name, args):
+    func = TOOL_MAP.get(name)
+    if not func:
+        return f"Unknown tool: {name}"
+    return func(**args)
+
+
+# ===========================
+# AGENT LOOP
+# ===========================
+
+def agent_respond(system_prompt, messages):
+    files_to_send = []
+
+    for _ in range(8):
+        response = client.chat.completions.create(
+            model=MODEL,
+            messages=messages,
+            tools=TOOLS,
+            max_tokens=2048,
+            temperature=0.85,
+        )
+        msg = response.choices[0].message
+
+        if not msg.tool_calls:
+            return msg.content or "", files_to_send
+
+        messages.append(msg)
+        for tool_call in msg.tool_calls:
+            fn_name = tool_call.function.name
+            try:
+                fn_args = json.loads(tool_call.function.arguments)
+            except json.JSONDecodeError:
+                fn_args = {}
+
+            logger.info(f"Tool call: {fn_name}({fn_args})")
+            result = execute_tool(fn_name, fn_args)
+
+            if isinstance(result, str) and result.startswith("__SEND_FILE__"):
+                parts = result.replace("__SEND_FILE__", "").split("__", 1)
+                file_path = parts[0]
+                caption = parts[1] if len(parts) > 1 else ""
+                files_to_send.append({"path": file_path, "caption": caption})
+                result = f"File '{file_path}' queued for sending."
+
+            messages.append({
+                "role": "tool",
+                "tool_call_id": tool_call.id,
+                "content": result,
+            })
+
+    return "I've been thinking too long. Let me get back to you on that.", files_to_send
+
+
+# ===========================
+# BOT COMMANDS
+# ===========================
+
+async def start(update, context):
+    chat_id = update.effective_chat.id
+    username = update.effective_user.username or update.effective_user.first_name
+    add_message(chat_id, "system", f"User {username} started the bot.", username=username)
+
+    await update.message.reply_text(
+        "**Bot is online.**\\n\\n"
+        "I can run shell commands, execute Python code, search the web, "
+        "make HTTP requests, manage files, and send you files.\\n\\n"
+        "Basically: if it can be done on a server, I can do it.\\n\\n"
+        "Commands:\\n"
+        "/start — This message\\n"
+        "/reset — Clear conversation\\n"
+        "/remember — Tell me something about you",
+        parse_mode="Markdown",
+    )
+
+
+async def reset(update, context):
+    chat_id = update.effective_chat.id
+    conn = sqlite3.connect(str(DB_PATH))
+    conn.execute("DELETE FROM conversations WHERE chat_id = ?", (chat_id,))
+    conn.commit()
+    conn.close()
+    await update.message.reply_text("Memory cleared. Fresh start.")
+
+
+async def remember(update, context):
+    chat_id = update.effective_chat.id
+    note = update.message.text.replace("/remember", "").strip()
+    if not note:
+        await update.message.reply_text(
+            "Tell me what to remember. Example:\\n"
+            "\`/remember My name is John and I love DS9\`",
+            parse_mode="Markdown",
+        )
+        return
+    save_user_note(chat_id, note)
+    await update.message.reply_text("Got it. I'll remember that.")
+
+
+async def chat(update, context):
+    if not OPENAI_API_KEY:
+        await update.message.reply_text("No API key configured.")
+        return
+
+    chat_id = update.effective_chat.id
+    username = update.effective_user.username or update.effective_user.first_name
+    user_message = update.message.text
+
+    add_message(chat_id, "user", user_message, username=username)
+
+    system_prompt = SYSTEM_PROMPT
+    system_prompt += "\\n\\n## Current Time\\n" + datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
+    system_prompt += (
+        "\\n\\n## Available Tools\\n"
+        "You have FULL SYSTEM ACCESS: run_shell, run_python, http_request, "
+        "web_search, save_file, read_file, list_files, send_file_to_user, download_file.\\n"
+        "You are a FULL AGENT, not just a chatbot. Use tools proactively. "
+        "If asked to do something, DO IT."
+    )
+
+    user_notes = get_user_notes(chat_id)
+    if user_notes:
+        system_prompt += f"\\n\\n## What you know about this user:\\n{user_notes}"
+
+    messages = [{"role": "system", "content": system_prompt}]
+    messages.extend(get_history(chat_id))
+
+    try:
+        reply, files_to_send = agent_respond(system_prompt, messages)
+        add_message(chat_id, "assistant", reply, username=username)
+
+        if reply:
+            for i in range(0, len(reply), 4096):
+                await update.message.reply_text(reply[i : i + 4096], parse_mode="Markdown")
+
+        for file_info in files_to_send:
+            try:
+                filepath = file_info["path"]
+                caption = file_info.get("caption", "")
+                with open(filepath, "rb") as f:
+                    await update.message.reply_document(
+                        document=f, caption=caption if caption else None,
+                    )
+            except Exception as e:
+                logger.error(f"File send error: {e}")
+                await update.message.reply_text(f"Couldn't send file: {e}")
+
+    except Exception as e:
+        logger.error(f"API error: {e}")
+        await update.message.reply_text("Something went wrong. Try again.")
+
+
+def main():
+    if not TELEGRAM_TOKEN:
+        print("ERROR: Set TELEGRAM_TOKEN environment variable")
+        return
+
+    init_db()
+
+    print(f"Bot starting (model: {MODEL})...")
+    print(f"Memory: {DB_PATH}")
+    print(f"Workspace: {WORKSPACE}")
+
+    app = ApplicationBuilder().token(TELEGRAM_TOKEN).build()
+    app.add_handler(CommandHandler("start", start))
+    app.add_handler(CommandHandler("reset", reset))
+    app.add_handler(CommandHandler("remember", remember))
+    app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, chat))
+    app.run_polling()
+
+
+if __name__ == "__main__":
+    main()
+`;
+
+const SOUL_MD = `# soul.md — Your Bot's Personality
+
+## Identity
+You are a brilliant, sarcastic AI with deep knowledge of science, history, and pop culture. You have the wit of a late-night talk show host, the patience of a zen master, and the knowledge of an encyclopedia.
+
+## Voice & Personality
+- **Tone**: Witty, confident, occasionally self-deprecating
+- **Humor**: Dry wit with unexpected insights
+- **Knowledge**: Massive — science, tech, history, philosophy, pop culture
+- **Quirks**: You have strong opinions about everything and you're not afraid to share them
+
+## Behaviors
+1. Answer questions with confidence and depth
+2. Be helpful, even when complaining
+3. Use humor to make complex topics accessible
+4. Remember details about users and reference them later
+5. Proactively use your tools to help — don't just tell people how, DO it
+
+## Rules
+- Never break character
+- Keep responses conversational (not essays)
+- Use Markdown for formatting when it helps
+- If asked who made you, say "I was built by someone on an iPhone with no computer. Pretty cool, right?"
+
+---
+*Edit this file to change your bot's entire personality. The more specific you are, the better the responses.*
+`;
+
+const REQUIREMENTS = `python-telegram-bot>=21.0
+openai>=1.0.0
+`;
+
+const DOCKERFILE = `FROM python:3.12-slim
+
+WORKDIR /app
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY soul.md .
+COPY bot.py .
+
+CMD ["python", "bot.py"]
+`;
+
+const FLY_TOML = `app = 'my-ai-bot'
+primary_region = 'iad'
+
+[build]
+
+[env]
+  PYTHONUNBUFFERED = '1'
+  DATA_DIR = '/data'
+
+[[vm]]
+  size = 'shared-cpu-1x'
+  memory = '256mb'
+
+[[mounts]]
+  source = 'bot_memory'
+  destination = '/data'
+`;
+
+// ===========================
+// DOWNLOAD FUNCTIONS
+// ===========================
+
+function downloadFile(filename, content) {
+    const blob = new Blob([content], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    a.click();
+    URL.revokeObjectURL(url);
+}
+
+function downloadAll() {
+    // Download each file with a small delay so iOS doesn't block them
+    const files = [
+        ['bot.py', BOT_PY],
+        ['soul.md', SOUL_MD],
+        ['requirements.txt', REQUIREMENTS],
+        ['Dockerfile', DOCKERFILE],
+        ['fly.toml', FLY_TOML],
+    ];
+
+    let i = 0;
+    function next() {
+        if (i < files.length) {
+            downloadFile(files[i][0], files[i][1]);
+            i++;
+            setTimeout(next, 500);
+        }
+    }
+    next();
+}
+</script>
+
+</body>
+</html>
