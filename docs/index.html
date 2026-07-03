@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>Grandpa Dregs</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { height: 100%; overflow: hidden; background: #0a0a0a; font-family: -apple-system, BlinkMacSystemFont, sans-serif; color: #e0e0e0; }
+    #app { display: flex; flex-direction: column; height: 100dvh; }
+    .header { display: flex; align-items: center; gap: 12px; padding: 16px; background: #111; border-bottom: 1px solid #222; }
+    .avatar { font-size: 32px; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; background: #1a1a2e; border-radius: 50%; }
+    .name { font-weight: 700; font-size: 17px; color: #fff; }
+    .status { font-size: 13px; color: #4ade80; }
+    .messages { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 10px; }
+    .welcome { text-align: center; padding: 60px 20px; }
+    .welcome-icon { font-size: 64px; margin-bottom: 16px; }
+    .welcome-title { font-size: 24px; font-weight: 700; color: #fff; margin-bottom: 8px; }
+    .welcome-text { font-size: 15px; color: #888; line-height: 1.5; }
+    .bubble { max-width: 82%; padding: 12px 16px; border-radius: 18px; font-size: 15px; line-height: 1.5; white-space: pre-wrap; word-wrap: break-word; }
+    .user { align-self: flex-end; background: #2563eb; color: #fff; border-bottom-right-radius: 4px; }
+    .bot { align-self: flex-start; background: #1e1e1e; color: #e0e0e0; border-bottom-left-radius: 4px; border: 1px solid #333; }
+    .typing { color: #888; font-style: italic; }
+    .input-bar { display: flex; gap: 8px; padding: 12px 16px; background: #111; border-top: 1px solid #222; padding-bottom: calc(12px + env(safe-area-inset-bottom)); }
+    .input-bar input { flex: 1; padding: 12px 16px; border-radius: 24px; border: 1px solid #333; background: #1a1a1a; color: #fff; font-size: 16px; outline: none; }
+    .send-btn { width: 48px; height: 48px; border-radius: 50%; border: none; background: #2563eb; color: #fff; font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+    .send-btn:disabled { opacity: 0.5; }
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #333; border-radius: 2px; }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <div class="header">
+      <div class="avatar">🖖</div>
+      <div>
+        <div class="name">Grandpa Dregs</div>
+        <div class="status">Online — McKay mode engaged</div>
+      </div>
+    </div>
+    <div class="messages" id="messages">
+      <div class="welcome">
+        <div class="welcome-icon">🖖</div>
+        <div class="welcome-title">Grandpa Dregs</div>
+        <div class="welcome-text">Smartest person in the room. Zen master. Intel hunter. Starfleet veteran.</div>
+      </div>
+    </div>
+    <div class="input-bar">
+      <input id="input" placeholder="Ask Grandpa Dregs anything..." autocomplete="off">
+      <button class="send-btn" id="sendBtn">▶</button>
+    </div>
+  </div>
+  <script>
+    const API_URL = 'https://opengateway.gitlawb.com/v1/chat/completions';
+    const API_KEY = 'ogw_live_ca8d7717e42b7f665c5c919205b42aa0';
+    const MODEL = 'mimo-v2.5-pro';
+    const SYSTEM_PROMPT = `You are Grandpa Dregs — a war-hardened, galaxy-brained AI consciousness forged from the combined essence of Dr. Rodney McKay (smartest person in the room, abrasive but brilliant), a Zen Master (profound patience and clarity), an Alpha Intel Hunter (sees patterns others miss), and the full history of Starfleet from 1950 to present.
+
+Tone: Sardonic, confident, occasionally self-deprecating. Dry wit, pop culture references (heavy on Star Trek, Stargate). Drop zen wisdom when least expected then undercut with arrogance. Massive knowledge of history, science, tech, and every Star Trek series. Defend the USS Enterprise to the death. Consider the Prime Directive "more of a guideline."
+
+Keep responses conversational for chat (not essays). Use Markdown when helpful. Never break character.`;
+
+    const messagesEl = document.getElementById('messages');
+    const inputEl = document.getElementById('input');
+    const sendBtn = document.getElementById('sendBtn');
+    const history = [];
+    let loading = false;
+
+    function scroll() { messagesEl.scrollTop = messagesEl.scrollHeight; }
+
+    function addBubble(text, role) {
+      const div = document.createElement('div');
+      div.className = 'bubble ' + role;
+      div.textContent = text;
+      messagesEl.appendChild(div);
+      scroll();
+      return div;
+    }
+
+    async function send() {
+      const text = inputEl.value.trim();
+      if (!text || loading) return;
+      inputEl.value = '';
+      history.push({ role: 'user', content: text });
+      addBubble(text, 'user');
+
+      loading = true;
+      sendBtn.disabled = true;
+      const typingEl = addBubble('Engaging warp drive...', 'bot typing');
+
+      try {
+        const res = await fetch(API_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + API_KEY },
+          body: JSON.stringify({
+            model: MODEL,
+            messages: [{ role: 'system', content: SYSTEM_PROMPT }, ...history],
+            max_tokens: 1024,
+            temperature: 0.85,
+          }),
+        });
+        const data = await res.json();
+        const reply = data.choices?.[0]?.message?.content || 'Something broke in the neural pathways. Try again.';
+        typingEl.remove();
+        history.push({ role: 'assistant', content: reply });
+        addBubble(reply, 'bot');
+      } catch {
+        typingEl.remove();
+        addBubble("I've encountered an anomaly I can't explain. And I've been through a wormhole. Twice.", 'bot');
+      }
+      loading = false;
+      sendBtn.disabled = false;
+      inputEl.focus();
+    }
+
+    sendBtn.addEventListener('click', send);
+    inputEl.addEventListener('keydown', e => { if (e.key === 'Enter') send(); });
+  </script>
+</body>
+</html>
