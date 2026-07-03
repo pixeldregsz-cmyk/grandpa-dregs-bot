@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>Grandpa Dregs</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🖖</text></svg>">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { height: 100%; background: #0a0a0a; font-family: -apple-system, BlinkMacSystemFont, sans-serif; color: #e0e0e0; }
+    .container { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100dvh; padding: 24px; text-align: center; }
+    .icon { font-size: 80px; margin-bottom: 20px; }
+    .title { font-size: 28px; font-weight: 700; color: #fff; margin-bottom: 8px; }
+    .subtitle { font-size: 15px; color: #888; margin-bottom: 40px; line-height: 1.5; }
+    .btn { display: inline-block; padding: 16px 48px; background: #2563eb; color: #fff; font-size: 18px; font-weight: 600; border-radius: 30px; text-decoration: none; border: none; cursor: pointer; }
+    .btn:active { background: #1d4ed8; }
+    .note { margin-top: 20px; font-size: 13px; color: #555; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="icon">🖖</div>
+    <div class="title">Grandpa Dregs</div>
+    <div class="subtitle">McKay swagger. Zen wisdom.<br>Intel hunter. Starfleet veteran.</div>
+    <a class="btn" id="openBtn" href="#">Open Chat</a>
+    <div class="note">Tap to chat on Telegram</div>
+  </div>
+  <script>
+    document.getElementById('openBtn').addEventListener('click', function(e) {
+      e.preventDefault();
+      // Try Telegram app first, fall back to web
+      window.location.href = 'tg://resolve?domain=pixelzbotbot';
+      setTimeout(function() {
+        window.location.href = 'https://t.me/pixelzbotbot';
+      }, 500);
+    });
+  </script>
+</body>
+</html>
