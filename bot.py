@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-"""Grandpa Dregs Telegram Bot — powered by Claude (Anthropic) + soul.md personality."""
+"""Grandpa Dregs Telegram Bot — powered by OpenGateway (mimo-v2.5-pro) + soul.md personality."""
 
 import os
 import logging
 from pathlib import Path
 
-import anthropic
+from openai import OpenAI
 from telegram import Update
 from telegram.ext import (
     ApplicationBuilder,
@@ -17,8 +17,9 @@ from telegram.ext import (
 
 # --- Config ---
 TELEGRAM_TOKEN = os.environ.get("TELEGRAM_TOKEN", "")
-ANTHROPIC_API_KEY = os.environ.get("ANTHROPIC_API_KEY", "")
-CLAUDE_MODEL = os.environ.get("CLAUDE_MODEL", "claude-sonnet-4-20250514")
+OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY", "")
+OPENAI_BASE_URL = os.environ.get("OPENAI_BASE_URL", "https://opengateway.gitlawb.com/v1")
+MODEL = os.environ.get("MODEL", "mimo-v2.5-pro")
 SOUL_PATH = Path(__file__).parent / "soul.md"
 
 # --- Logging ---
@@ -31,8 +32,8 @@ logger = logging.getLogger(__name__)
 # --- Load soul ---
 SYSTEM_PROMPT = SOUL_PATH.read_text() if SOUL_PATH.exists() else "You are Grandpa Dregs."
 
-# --- Claude client ---
-client = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY)
+# --- OpenAI-compatible client (pointed at OpenGateway) ---
+client = OpenAI(api_key=OPENAI_API_KEY, base_url=OPENAI_BASE_URL)
 
 # --- Conversation memory (per chat, last N messages) ---
 MAX_HISTORY = 20
@@ -48,7 +49,6 @@ def get_history(chat_id: int) -> list[dict]:
 def add_message(chat_id: int, role: str, content: str):
     history = get_history(chat_id)
     history.append({"role": role, "content": content})
-    # Trim to last N messages
     if len(history) > MAX_HISTORY:
         conversations[chat_id] = history[-MAX_HISTORY:]
 
@@ -78,9 +78,9 @@ async def reset(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 async def chat(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    if not ANTHROPIC_API_KEY:
+    if not OPENAI_API_KEY:
         await update.message.reply_text(
-            "No Anthropic API key configured. "
+            "No API key configured. "
             "Even I can't think without fuel, kid."
         )
         return
@@ -88,22 +88,20 @@ async def chat(update: Update, context: ContextTypes.DEFAULT_TYPE):
     chat_id = update.effective_chat.id
     user_message = update.message.text
 
-    # Add user message to history
     add_message(chat_id, "user", user_message)
 
-    # Build messages for Claude API
-    messages = get_history(chat_id)
+    messages = [{"role": "system", "content": SYSTEM_PROMPT}]
+    messages.extend(get_history(chat_id))
 
     try:
-        response = client.messages.create(
-            model=CLAUDE_MODEL,
-            max_tokens=1024,
-            system=SYSTEM_PROMPT,
+        response = client.chat.completions.create(
+            model=MODEL,
             messages=messages,
+            max_tokens=1024,
+            temperature=0.85,
         )
-        reply = response.content[0].text
+        reply = response.choices[0].message.content
 
-        # Add assistant reply to history
         add_message(chat_id, "assistant", reply)
 
         # Telegram has a 4096 char limit — split if needed
@@ -113,18 +111,12 @@ async def chat(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 parse_mode="Markdown",
             )
 
-    except anthropic.APIError as e:
-        logger.error(f"Anthropic API error: {e}")
+    except Exception as e:
+        logger.error(f"API error: {e}")
         await update.message.reply_text(
             "Something broke in the neural pathways. "
             "Try again — if it persists, "
             "blame the Tok'ra."
-        )
-    except Exception as e:
-        logger.error(f"Unexpected error: {e}")
-        await update.message.reply_text(
-            "I've encountered an anomaly I can't explain. "
-            "And I've been through a wormhole. Twice."
         )
 
 
@@ -134,10 +126,10 @@ def main():
         print("Get one from @BotFather on Telegram")
         return
 
-    if not ANTHROPIC_API_KEY:
-        print("WARNING: ANTHROPIC_API_KEY not set — bot will respond with errors")
+    if not OPENAI_API_KEY:
+        print("WARNING: OPENAI_API_KEY not set — bot will respond with errors")
 
-    print("Grandpa Dregs is coming online...")
+    print(f"Grandpa Dregs is coming online (model: {MODEL})...")
     print("Press Ctrl+C to shut down.")
 
     app = ApplicationBuilder().token(TELEGRAM_TOKEN).build()
