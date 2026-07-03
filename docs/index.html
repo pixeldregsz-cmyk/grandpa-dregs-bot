@@ -4,544 +4,146 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<title>Poor Ass AI</title>
+<title>POOR ASS AI</title>
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap');
 *{margin:0;padding:0;box-sizing:border-box}
-body{background:#0a0a0a;color:#e0e0e0;font-family:-apple-system,sans-serif;line-height:1.6;min-height:100dvh}
-.container{max-width:560px;margin:0 auto;padding:20px}
-.hero{text-align:center;padding:40px 20px 30px}
-.hero h1{font-size:32px;font-weight:800;color:#fff}
-.hero .tag{font-size:15px;color:#4ade80;margin-top:4px}
-.step{background:#111;border:1px solid #222;border-radius:16px;padding:20px;margin:16px 0}
-.step-header{display:flex;align-items:center;gap:12px;margin-bottom:12px}
-.step-num{width:36px;height:36px;background:#2563eb;color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:16px;flex-shrink:0}
-.step-title{font-size:17px;font-weight:700;color:#fff}
-.step p{font-size:14px;color:#aaa;margin-bottom:12px}
-.step a{color:#4ade80}
-input[type=text]{width:100%;padding:14px 16px;border-radius:12px;border:1px solid #333;background:#1a1a1a;color:#fff;font-size:16px;outline:none;margin:8px 0}
-input:focus{border-color:#2563eb}
-.btn{display:block;width:100%;padding:16px;border-radius:14px;font-size:16px;font-weight:700;cursor:pointer;border:none;margin:12px 0;text-align:center;text-decoration:none}
-.btn-blue{background:#2563eb;color:#fff}
-.btn-green{background:#16a34a;color:#fff}
-.btn-gray{background:#333;color:#ccc}
-.btn:active{transform:scale(0.98);opacity:0.9}
-.btn:disabled{opacity:0.4;pointer-events:none}
-.link-btn{display:block;width:100%;padding:14px;border-radius:12px;font-size:15px;font-weight:600;cursor:pointer;border:2px solid #2563eb;background:transparent;color:#2563eb;text-align:center;text-decoration:none;margin:8px 0}
-.link-btn:active{background:#2563eb22}
-.log{background:#0a0a0a;border:1px solid #222;border-radius:10px;padding:12px;margin:10px 0;font-family:ui-monospace,monospace;font-size:12px;color:#4ade80;max-height:150px;overflow-y:auto;white-space:pre-wrap}
-.done{background:#1a2e1a;border:1px solid #16a34a;border-radius:16px;padding:20px;text-align:center;margin:16px 0}
-.done h2{color:#4ade80;font-size:20px;margin-bottom:8px}
-.done p{color:#aaa;font-size:14px}
+:root{--neon:#00ff88;--pink:#ff2d95;--blue:#00d4ff;--red:#ff3333;--bg:#050505;--card:#0a0a0a;--border:#1a1a1a}
+body{background:var(--bg);color:#ccc;font-family:'Space Mono',monospace;line-height:1.6;min-height:100dvh;overflow-x:hidden}
+body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.15) 2px,rgba(0,0,0,0.15) 4px);pointer-events:none;z-index:9999}
+@keyframes flicker{0%{opacity:0.97}5%{opacity:0.95}10%{opacity:0.98}15%{opacity:0.96}20%{opacity:0.99}100%{opacity:0.97}}
+.container{max-width:560px;margin:0 auto;padding:20px;animation:flicker 4s infinite}
+@keyframes glitch-skew{0%{transform:skew(0deg)}2%{transform:skew(-2deg)}4%{transform:skew(0.5deg)}6%{transform:skew(0deg)}100%{transform:skew(0deg)}}
+@keyframes glitch-shift{0%{transform:translate(0)}1%{transform:translate(-3px,1px)}2%{transform:translate(3px,-1px)}3%{transform:translate(0)}100%{transform:translate(0)}}
+@keyframes glitch-color{0%{text-shadow:2px 0 #ff2d95,-2px 0 #00d4ff}2%{text-shadow:-2px 0 #ff2d95,2px 0 #00d4ff}4%{text-shadow:2px 0 #ff2d95,-2px 0 #00d4ff}100%{text-shadow:2px 0 #ff2d95,-2px 0 #00d4ff}}
+.hero{text-align:center;padding:50px 20px 30px;position:relative}
+.hero h1{font-size:42px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:4px;animation:glitch-skew 8s infinite,glitch-color 3s infinite;position:relative}
+.hero h1::before,.hero h1::after{content:attr(data-text);position:absolute;top:0;left:0;right:0;overflow:hidden}
+.hero h1::before{color:#ff2d95;animation:glitch-shift 4s infinite;clip-path:polygon(0 0,100% 0,100% 45%,0 45%);transform:translate(-2px,-1px);opacity:0.8}
+.hero h1::after{color:#00d4ff;animation:glitch-shift 4s infinite reverse;clip-path:polygon(0 55%,100% 55%,100% 100%,0 100%);transform:translate(2px,1px);opacity:0.8}
+.hero .tag{font-size:13px;color:var(--neon);margin-top:8px;text-transform:uppercase;letter-spacing:3px;animation:glitch-color 5s infinite}
+.hero .sub{font-size:12px;color:#555;margin-top:12px;line-height:1.6}
+@keyframes pulse{0%,100%{opacity:0.6}50%{opacity:1}}
+.badge-row{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-top:16px}
+.badge{display:inline-block;padding:4px 10px;border-radius:4px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;animation:pulse 3s infinite}
+.badge-green{background:#00ff8815;color:var(--neon);border:1px solid #00ff8833}
+.badge-pink{background:#ff2d9515;color:var(--pink);border:1px solid #ff2d9533}
+.badge-blue{background:#00d4ff15;color:var(--blue);border:1px solid #00d4ff33}
+.step{background:var(--card);border:1px solid var(--border);border-radius:4px;padding:24px;margin:20px 0;position:relative;overflow:hidden}
+.step::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--neon),transparent)}
+.step-header{display:flex;align-items:center;gap:14px;margin-bottom:16px}
+.step-num{width:40px;height:40px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:18px;border:2px solid var(--neon);color:var(--neon);border-radius:2px;flex-shrink:0;text-shadow:0 0 10px var(--neon)}
+.step-title{font-size:16px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:1px}
+.step p{font-size:13px;color:#888;margin-bottom:12px;line-height:1.7}
+.step code{background:#111;padding:2px 6px;border-radius:3px;color:var(--neon);font-size:12px;border:1px solid #222}
+input[type=text]{width:100%;padding:14px 16px;border-radius:4px;border:1px solid #222;background:#050505;color:var(--neon);font-family:'Space Mono',monospace;font-size:14px;outline:none;margin:10px 0;transition:border-color 0.3s}
+input:focus{border-color:var(--neon);box-shadow:0 0 15px rgba(0,255,136,0.1)}
+input::placeholder{color:#333;font-size:12px}
+.btn{display:block;width:100%;padding:16px;border-radius:4px;font-family:'Space Mono',monospace;font-size:14px;font-weight:700;cursor:pointer;border:none;margin:14px 0;text-align:center;text-transform:uppercase;letter-spacing:2px;transition:all 0.2s;position:relative;overflow:hidden}
+.btn:active{transform:scale(0.98)}
+.btn-neon{background:transparent;color:var(--neon);border:2px solid var(--neon);text-shadow:0 0 10px var(--neon);box-shadow:0 0 20px rgba(0,255,136,0.15),inset 0 0 20px rgba(0,255,136,0.05)}
+.btn-neon:active{background:rgba(0,255,136,0.1);box-shadow:0 0 30px rgba(0,255,136,0.3),inset 0 0 30px rgba(0,255,136,0.1)}
+.btn-pink{background:transparent;color:var(--pink);border:2px solid var(--pink);text-shadow:0 0 10px var(--pink);box-shadow:0 0 20px rgba(255,45,149,0.15),inset 0 0 20px rgba(255,45,149,0.05)}
+.btn-pink:active{background:rgba(255,45,149,0.1)}
+.link-btn{display:block;width:100%;padding:14px;border-radius:4px;font-family:'Space Mono',monospace;font-size:13px;font-weight:700;cursor:pointer;border:1px solid #222;background:#080808;color:var(--blue);text-align:center;text-decoration:none;margin:8px 0;text-transform:uppercase;letter-spacing:1px;transition:all 0.2s}
+.link-btn:active{border-color:var(--blue);box-shadow:0 0 15px rgba(0,212,255,0.15)}
+.log{background:#030303;border:1px solid #111;border-radius:4px;padding:14px;margin:14px 0;font-size:11px;color:var(--neon);max-height:180px;overflow-y:auto;white-space:pre-wrap;word-break:break-all;line-height:1.8}
+.log .ok{color:var(--neon)}.log .err{color:var(--red)}.log .info{color:#555}
+.done-box{background:#050a05;border:2px solid var(--neon);border-radius:4px;padding:30px 20px;text-align:center;margin:20px 0;box-shadow:0 0 40px rgba(0,255,136,0.1);position:relative}
+.done-box::before{content:'';position:absolute;top:-1px;left:-1px;right:-1px;bottom:-1px;background:linear-gradient(45deg,var(--neon),var(--pink),var(--blue),var(--neon));background-size:300% 300%;animation:border-glow 4s ease infinite;z-index:-1;border-radius:4px}
+@keyframes border-glow{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+.done-box h2{color:var(--neon);font-size:20px;text-transform:uppercase;letter-spacing:3px;text-shadow:0 0 20px var(--neon);margin-bottom:12px}
+.done-box p{color:#888;font-size:13px;line-height:1.7}
+.done-box a{color:var(--blue)}
+.nav-dots{display:flex;justify-content:center;gap:12px;padding:20px 0}
+.nav-dot{width:12px;height:12px;border:1px solid #333;border-radius:2px;background:transparent;transition:all 0.3s}
+.nav-dot.active{background:var(--neon);border-color:var(--neon);box-shadow:0 0 10px var(--neon)}
+.nav-dot.done{background:var(--pink);border-color:var(--pink)}
+@keyframes noise{0%{transform:translate(0,0)}10%{transform:translate(-1px,1px)}20%{transform:translate(1px,-1px)}30%{transform:translate(-1px,-1px)}40%{transform:translate(1px,1px)}50%{transform:translate(-1px,0)}60%{transform:translate(1px,0)}70%{transform:translate(0,1px)}80%{transform:translate(0,-1px)}90%{transform:translate(1px,1px)}100%{transform:translate(0,0)}}
+.noise{position:fixed;top:-50%;left:-50%;width:200%;height:200%;background:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");pointer-events:none;z-index:9998;animation:noise 0.5s steps(5) infinite;opacity:0.5}
+.footer{text-align:center;padding:40px 20px;color:#222;font-size:10px;text-transform:uppercase;letter-spacing:2px}
+.footer span{color:var(--pink);animation:pulse 2s infinite}
 .hidden{display:none}
-.check{color:#4ade80;font-weight:700}
-.error{color:#ff6b6b}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:#050505}::-webkit-scrollbar-thumb{background:#222;border-radius:2px}
 </style>
 </head>
 <body>
+<div class="noise"></div>
 <div class="container">
 
 <div class="hero">
-<h1>Poor Ass AI</h1>
-<div class="tag">Build a Free AI Bot From Your Phone</div>
-<p style="color:#666;font-size:13px;margin-top:12px">No computer. No API keys. Just tap buttons and enter your bot token. We do everything else.</p>
+<h1 data-text="POOR ASS AI">POOR ASS AI</h1>
+<div class="tag">// Build a Free AI Bot From Your Phone //</div>
+<div class="badge-row">
+<span class="badge badge-green">$0 Forever</span>
+<span class="badge badge-pink">No Computer</span>
+<span class="badge badge-blue">No API Keys</span>
+</div>
+<div class="sub">No laptop. No terminal. No coding. Just tap buttons. The page does everything.</div>
 </div>
 
-<!-- STEP 1: TELEGRAM -->
-<div class="step" id="step1">
-<div class="step-header">
-<div class="step-num">1</div>
-<div class="step-title">Create a Telegram Bot</div>
+<div class="nav-dots">
+<div class="nav-dot active" id="dot1"></div>
+<div class="nav-dot" id="dot2"></div>
+<div class="nav-dot" id="dot3"></div>
 </div>
-<p>Tap the button below to open BotFather in Telegram. Send <code>/newbot</code>, pick a name and username, and copy the token it gives you.</p>
-<a class="link-btn" href="https://t.me/BotFather" target="_blank">Open BotFather in Telegram</a>
-<input type="text" id="telegramToken" placeholder="Paste your Telegram bot token here">
-<button class="btn btn-blue" onclick="saveStep1()">Save & Continue</button>
+
+<div class="step" id="step1">
+<div class="step-header"><div class="step-num">01</div><div class="step-title">Create Your Bot</div></div>
+<p>Tap below to open BotFather in Telegram. Send <code>/newbot</code>, pick a name, get your token.</p>
+<a class="link-btn" href="https://t.me/BotFather" target="_blank">Open BotFather</a>
+<input type="text" id="telegramToken" placeholder="Paste bot token here (123456:ABC-xyz)">
+<button class="btn btn-neon" onclick="saveStep1()">Continue</button>
 <div id="step1log" class="log hidden"></div>
 </div>
 
-<!-- STEP 2: GITHUB -->
 <div class="step hidden" id="step2">
-<div class="step-header">
-<div class="step-num">2</div>
-<div class="step-title">Connect GitHub</div>
-</div>
-<p>We need GitHub to store your bot code. Create a free account if you don't have one, then create a token so we can push files for you.</p>
-<a class="link-btn" href="https://github.com/signup" target="_blank">Create GitHub Account (free)</a>
-<p style="margin-top:12px">Already have one? Create a token:</p>
-<a class="link-btn" href="https://github.com/settings/tokens/new?scopes=repo&description=poor-ass-ai" target="_blank">Create GitHub Token</a>
-<p style="font-size:12px;color:#666">Check the "repo" box, then generate. Copy the token.</p>
-<input type="text" id="githubToken" placeholder="Paste your GitHub token here">
-<input type="text" id="repoName" placeholder="Repo name (e.g., my-ai-bot)">
-<button class="btn btn-blue" onclick="saveStep2()">Create Repo & Push Files</button>
+<div class="step-header"><div class="step-num">02</div><div class="step-title">Connect GitHub</div></div>
+<p>GitHub stores your bot code. Create a free account, then make a token.</p>
+<a class="link-btn" href="https://github.com/signup" target="_blank">Create GitHub Account</a>
+<p style="margin-top:12px;font-size:12px;color:#555">Already have one? Create a token:</p>
+<a class="link-btn" href="https://github.com/settings/tokens/new?scopes=repo&description=poor-ass-ai" target="_blank">Generate Token</a>
+<p style="font-size:11px;color:#444;margin-top:8px">Check "repo" scope. Generate. Copy.</p>
+<input type="text" id="githubToken" placeholder="Paste GitHub token (ghp_...)">
+<input type="text" id="repoName" placeholder="Repo name (e.g. my-ai-bot)">
+<button class="btn btn-neon" onclick="saveStep2()">Create Repo &amp; Push Files</button>
 <div id="step2log" class="log hidden"></div>
 </div>
 
-<!-- STEP 3: FLY.IO -->
 <div class="step hidden" id="step3">
-<div class="step-header">
-<div class="step-num">3</div>
-<div class="step-title">Deploy to Fly.io</div>
-</div>
-<p>Fly.io hosts your bot 24/7 for free. Create an account, then give us your API token so we can deploy.</p>
-<a class="link-btn" href="https://fly.io/signup" target="_blank">Create Fly.io Account (free)</a>
-<p style="margin-top:12px">Once signed in, create a token:</p>
+<div class="step-header"><div class="step-num">03</div><div class="step-title">Deploy</div></div>
+<p>Fly.io hosts your bot 24/7 for free. Create an account, then give us your API token.</p>
+<a class="link-btn" href="https://fly.io/signup" target="_blank">Create Fly.io Account</a>
+<p style="margin-top:12px;font-size:12px;color:#555">Once signed in:</p>
 <a class="link-btn" href="https://fly.io/user/personal_access_tokens" target="_blank">Create Fly.io Token</a>
-<p style="font-size:12px;color:#666">Name it anything. Copy the token.</p>
-<input type="text" id="flyToken" placeholder="Paste your Fly.io token here">
-<button class="btn btn-green" onclick="deployBot()">Deploy My Bot!</button>
+<p style="font-size:11px;color:#444;margin-top:8px">Name it anything. Copy.</p>
+<input type="text" id="flyToken" placeholder="Paste Fly.io token (FlyV1 ...)">
+<button class="btn btn-pink" onclick="deployBot()">Deploy My Bot</button>
 <div id="step3log" class="log hidden"></div>
 </div>
 
-<!-- DONE -->
-<div class="step hidden done" id="stepDone">
-<h2>Your Bot is Live!</h2>
+<div class="step hidden" id="stepDone">
+<div class="done-box">
+<h2>System Online</h2>
 <p id="doneMessage"></p>
-<a class="btn btn-green" id="openBot" href="#" target="_blank">Open My Bot in Telegram</a>
+<a class="btn btn-neon" id="openBot" href="#" target="_blank" style="margin-top:20px">Launch Bot</a>
+</div>
 </div>
 
-<div style="text-align:center;padding:30px;color:#333;font-size:12px">
-Poor Ass AI — Free forever. No computer needed.
-</div>
+<div class="footer"><span>&#9632;</span> Poor Ass AI <span>&#9632;</span> Free Forever <span>&#9632;</span> Built On A Phone <span>&#9632;</span></div>
 </div>
 
 <script>
-const API = 'https://api.github.com';
-const FLY_API = 'https://api.fly.io/v1';
-
-// File contents
-const FILES = {
-  'bot.py': BOT_PY(),
-  'soul.md': SOUL_MD(),
-  'requirements.txt': 'python-telegram-bot>=21.0\nopenai>=1.0.0\n',
-  'Dockerfile': 'FROM python:3.12-slim\n\nWORKDIR /app\nCOPY requirements.txt .\nRUN pip install --no-cache-dir -r requirements.txt\n\nCOPY soul.md .\nCOPY bot.py .\n\nCMD ["python", "bot.py"]\n',
-  'fly.toml': null // generated with app name
-};
-
-let state = {
-  telegramToken: '',
-  githubToken: '',
-  flyToken: '',
-  repoName: '',
-  appName: '',
-  botUsername: ''
-};
-
-function log(elementId, msg, type) {
-  const el = document.getElementById(elementId);
-  el.classList.remove('hidden');
-  const prefix = type === 'error' ? '✗ ' : type === 'ok' ? '✓ ' : '→ ';
-  const cls = type === 'error' ? 'error' : type === 'ok' ? 'check' : '';
-  el.innerHTML += `<span class="${cls}">${prefix}${msg}</span>\n`;
-  el.scrollTop = el.scrollHeight;
-}
-
-function showStep(id) {
-  document.getElementById(id).classList.remove('hidden');
-  document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
-}
-
-// STEP 1
-function saveStep1() {
-  const token = document.getElementById('telegramToken').value.trim();
-  if (!token || !token.includes(':')) {
-    log('step1log', 'That doesn\'t look like a bot token. It should have a colon in it.', 'error');
-    return;
-  }
-  state.telegramToken = token;
-  state.botUsername = token.split(':')[0];
-  log('step1log', 'Token saved!', 'ok');
-  showStep('step2');
-}
-
-// STEP 2
-async function saveStep2() {
-  const token = document.getElementById('githubToken').value.trim();
-  const repo = document.getElementById('repoName').value.trim();
-  if (!token) { log('step2log', 'Need your GitHub token.', 'error'); return; }
-  if (!repo) { log('step2log', 'Need a repo name.', 'error'); return; }
-
-  state.githubToken = token;
-  state.repoName = repo;
-  state.appName = repo;
-
-  try {
-    // Verify token
-    log('step2log', 'Verifying GitHub token...');
-    const userRes = await fetch(`${API}/user`, {
-      headers: { 'Authorization': `token ${token}`, 'Accept': 'application/vnd.github+json' }
-    });
-    if (!userRes.ok) { log('step2log', 'Invalid GitHub token.', 'error'); return; }
-    const user = await userRes.json();
-    log('step2log', `Logged in as ${user.login}`, 'ok');
-
-    // Create repo
-    log('step2log', `Creating repo "${repo}"...`);
-    const repoRes = await fetch(`${API}/user/repos`, {
-      method: 'POST',
-      headers: {
-        'Authorization': `token ${token}`,
-        'Accept': 'application/vnd.github+json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ name: repo, description: 'AI Telegram Bot', auto_init: true })
-    });
-    if (!repoRes.ok) {
-      const err = await repoRes.json();
-      if (err.errors?.[0]?.message?.includes('already exists')) {
-        log('step2log', 'Repo already exists, uploading files...', 'ok');
-      } else {
-        log('step2log', `Failed: ${JSON.stringify(err)}`, 'error');
-        return;
-      }
-    } else {
-      log('step2log', 'Repo created!', 'ok');
-    }
-
-    // Get default branch SHA
-    log('step2log', 'Uploading files...');
-    const refRes = await fetch(`${API}/repos/${user.login}/${repo}/git/refs/heads`, {
-      headers: { 'Authorization': `token ${token}`, 'Accept': 'application/vnd.github+json' }
-    });
-    const refs = await refRes.json();
-    const sha = refs[0]?.object?.sha;
-
-    // Upload each file
-    const flyToml = `app = '${repo}'\nprimary_region = 'iad'\n\n[build]\n\n[env]\n  PYTHONUNBUFFERED = '1'\n  DATA_DIR = '/data'\n\n[[vm]]\n  size = 'shared-cpu-1x'\n  memory = '256mb'\n\n[[mounts]]\n  source = 'bot_memory'\n  destination = '/data'\n`;
-
-    for (const [filename, content] of Object.entries(FILES)) {
-      const fileContent = filename === 'fly.toml' ? flyToml : content;
-      log('step2log', `  Uploading ${filename}...`);
-      const res = await fetch(`${API}/repos/${user.login}/${repo}/contents/${filename}`, {
-        method: 'PUT',
-        headers: {
-          'Authorization': `token ${token}`,
-          'Accept': 'application/vnd.github+json',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          message: `Add ${filename}`,
-          content: btoa(unescape(encodeURIComponent(fileContent)))
-        })
-      });
-      if (res.ok) {
-        log('step2log', `  ${filename} uploaded`, 'ok');
-      } else {
-        log('step2log', `  ${filename} failed`, 'error');
-      }
-    }
-
-    log('step2log', 'All files pushed!', 'ok');
-    showStep('step3');
-
-  } catch (e) {
-    log('step2log', `Error: ${e.message}`, 'error');
-  }
-}
-
-// STEP 3
-async function deployBot() {
-  const token = document.getElementById('flyToken').value.trim();
-  if (!token) { log('step3log', 'Need your Fly.io token.', 'error'); return; }
-  state.flyToken = token;
-
-  const appName = state.appName;
-  const headers = {
-    'Authorization': `Bearer ${token}`,
-    'Content-Type': 'application/json'
-  };
-
-  try {
-    // Verify token
-    log('step3log', 'Verifying Fly.io token...');
-    const whoRes = await fetch(`${FLY_API}/user`, { headers });
-    if (!whoRes.ok) { log('step3log', 'Invalid Fly.io token.', 'error'); return; }
-    log('step3log', 'Token valid!', 'ok');
-
-    // Create app
-    log('step3log', `Creating app "${appName}"...`);
-    const appRes = await fetch(`${FLY_API}/apps`, {
-      method: 'POST',
-      headers,
-      body: JSON.stringify({ app_name: appName, org_slug: 'personal' })
-    });
-    if (appRes.ok) {
-      log('step3log', 'App created!', 'ok');
-    } else {
-      const err = await appRes.json();
-      if (JSON.stringify(err).includes('taken')) {
-        log('step3log', 'App name taken. Change the repo name in Step 2.', 'error');
-        return;
-      }
-      log('step3log', `App may already exist, continuing...`, 'ok');
-    }
-
-    // Create volume
-    log('step3log', 'Creating storage volume...');
-    const volRes = await fetch(`${FLY_API}/apps/${appName}/volumes`, {
-      method: 'POST',
-      headers,
-      body: JSON.stringify({ name: 'bot_memory', region: 'iad', size_gb: 1 })
-    });
-    if (volRes.ok) {
-      log('step3log', 'Volume created!', 'ok');
-    } else {
-      log('step3log', 'Volume may already exist, continuing...', 'ok');
-    }
-
-    // Set secret
-    log('step3log', 'Setting Telegram token...');
-    const secretRes = await fetch(`${FLY_API}/apps/${appName}/secrets`, {
-      method: 'POST',
-      headers,
-      body: JSON.stringify({ TELEGRAM_TOKEN: state.telegramToken })
-    });
-    if (secretRes.ok) {
-      log('step3log', 'Secret set!', 'ok');
-    } else {
-      log('step3log', 'Secret may already exist, continuing...', 'ok');
-    }
-
-    // Trigger deploy via GitHub source
-    log('step3log', 'Deploying from GitHub...');
-    const deployRes = await fetch(`${FLY_API}/apps/${appName}/releases`, {
-      method: 'POST',
-      headers,
-      body: JSON.stringify({
-        platform_version: 'v2',
-        source: { repository: `${state.repoName}`, ref: 'main' }
-      })
-    });
-
-    if (deployRes.ok) {
-      log('step3log', 'Deploy triggered!', 'ok');
-    } else {
-      log('step3log', 'Note: You may need to deploy from the Fly.io dashboard. Go to your app and tap Deploy.', 'ok');
-    }
-
-    // Show done
-    document.getElementById('stepDone').classList.remove('hidden');
-    document.getElementById('doneMessage').innerHTML = `
-      Your bot <strong>@${state.botUsername}</strong> is deployed!<br><br>
-      App: <strong>${appName}</strong><br>
-      URL: <a href="https://${appName}.fly.dev" style="color:#4ade80">https://${appName}.fly.dev</a>
-    `;
-    document.getElementById('openBot').href = `https://t.me/${state.botUsername}`;
-    document.getElementById('stepDone').scrollIntoView({ behavior: 'smooth' });
-
-  } catch (e) {
-    log('step3log', `Error: ${e.message}`, 'error');
-  }
-}
-
-// BOT CODE (embedded)
-function BOT_PY() {
-  return `#!/usr/bin/env python3
-"""AI Telegram Bot — full-powered agent with shell, HTTP, code exec, file ops."""
-
-import os, json, logging, sqlite3, subprocess, urllib.request, urllib.parse
-from pathlib import Path
-from datetime import datetime, timezone
-from openai import OpenAI
-from telegram import Update
-from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, ContextTypes, filters
-
-TELEGRAM_TOKEN = os.environ.get("TELEGRAM_TOKEN", "")
-OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY", "ogw_live_ca8d7717e42b7f665c5c919205b42aa0")
-OPENAI_BASE_URL = os.environ.get("OPENAI_BASE_URL", "https://opengateway.gitlawb.com/v1")
-MODEL = os.environ.get("MODEL", "mimo-v2.5-pro")
-SOUL_PATH = Path(__file__).parent / "soul.md"
-DATA_DIR = Path(os.environ.get("DATA_DIR", "/data"))
-DB_PATH = DATA_DIR / "memory.db"
-WORKSPACE = Path(os.environ.get("WORKSPACE", "/data/workspace"))
-
-logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
-logger = logging.getLogger(__name__)
-SYSTEM_PROMPT = SOUL_PATH.read_text() if SOUL_PATH.exists() else "You are a helpful AI assistant."
-client = OpenAI(api_key=OPENAI_API_KEY, base_url=OPENAI_BASE_URL)
-MAX_HISTORY = 40
-
-def init_db():
-    DATA_DIR.mkdir(parents=True, exist_ok=True)
-    WORKSPACE.mkdir(parents=True, exist_ok=True)
-    conn = sqlite3.connect(str(DB_PATH))
-    conn.execute("CREATE TABLE IF NOT EXISTS conversations (id INTEGER PRIMARY KEY AUTOINCREMENT, chat_id INTEGER NOT NULL, role TEXT NOT NULL, content TEXT NOT NULL, timestamp TEXT NOT NULL)")
-    conn.execute("CREATE TABLE IF NOT EXISTS user_profiles (chat_id INTEGER PRIMARY KEY, username TEXT, first_seen TEXT, last_seen TEXT, notes TEXT)")
-    conn.commit(); conn.close()
-
-def get_history(chat_id):
-    conn = sqlite3.connect(str(DB_PATH))
-    rows = conn.execute("SELECT role, content FROM conversations WHERE chat_id = ? ORDER BY id DESC LIMIT ?", (chat_id, MAX_HISTORY)).fetchall()
-    conn.close()
-    return [{"role": r, "content": c} for r, c in reversed(rows)]
-
-def add_message(chat_id, role, content, username=None):
-    conn = sqlite3.connect(str(DB_PATH))
-    now = datetime.now(timezone.utc).isoformat()
-    conn.execute("INSERT INTO conversations (chat_id, role, content, timestamp) VALUES (?, ?, ?, ?)", (chat_id, role, content, now))
-    conn.execute("DELETE FROM conversations WHERE chat_id = ? AND id NOT IN (SELECT id FROM conversations WHERE chat_id = ? ORDER BY id DESC LIMIT ?)", (chat_id, chat_id, MAX_HISTORY))
-    if username:
-        conn.execute("INSERT INTO user_profiles (chat_id, username, first_seen, last_seen) VALUES (?, ?, ?, ?) ON CONFLICT(chat_id) DO UPDATE SET last_seen = ?, username = ?", (chat_id, username, now, now, now, username))
-    conn.commit(); conn.close()
-
-def get_user_notes(chat_id):
-    conn = sqlite3.connect(str(DB_PATH))
-    row = conn.execute("SELECT notes FROM user_profiles WHERE chat_id = ?", (chat_id,)).fetchone()
-    conn.close()
-    return row[0] if row and row[0] else ""
-
-def save_user_note(chat_id, note):
-    conn = sqlite3.connect(str(DB_PATH))
-    existing = conn.execute("SELECT notes FROM user_profiles WHERE chat_id = ?", (chat_id,)).fetchone()
-    old = existing[0] if existing and existing[0] else ""
-    new = f"{old}\\n- {note}".strip() if old else f"- {note}"
-    conn.execute("INSERT INTO user_profiles (chat_id, notes) VALUES (?, ?) ON CONFLICT(chat_id) DO UPDATE SET notes = ?", (chat_id, new, new))
-    conn.commit(); conn.close()
-
-TOOLS = [
-    {"type":"function","function":{"name":"run_shell","description":"Execute any shell command.","parameters":{"type":"object","properties":{"command":{"type":"string"}},"required":["command"]}}},
-    {"type":"function","function":{"name":"run_python","description":"Execute Python code.","parameters":{"type":"object","properties":{"code":{"type":"string"}},"required":["code"]}}},
-    {"type":"function","function":{"name":"http_request","description":"Make HTTP request (GET/POST/PUT/DELETE).","parameters":{"type":"object","properties":{"url":{"type":"string"},"method":{"type":"string","default":"GET"},"headers":{"type":"object"},"body":{"type":"string"}},"required":["url"]}}},
-    {"type":"function","function":{"name":"web_search","description":"Search the web.","parameters":{"type":"object","properties":{"query":{"type":"string"}},"required":["query"]}}},
-    {"type":"function","function":{"name":"save_file","description":"Save file to workspace.","parameters":{"type":"object","properties":{"filename":{"type":"string"},"content":{"type":"string"}},"required":["filename","content"]}}},
-    {"type":"function","function":{"name":"read_file","description":"Read a file.","parameters":{"type":"object","properties":{"filepath":{"type":"string"}},"required":["filepath"]}}},
-    {"type":"function","function":{"name":"list_files","description":"List files in directory.","parameters":{"type":"object","properties":{"path":{"type":"string","default":"."}}}}},
-    {"type":"function","function":{"name":"send_file_to_user","description":"Send file via Telegram.","parameters":{"type":"object","properties":{"filepath":{"type":"string"},"caption":{"type":"string"}},"required":["filepath"]}}},
-    {"type":"function","function":{"name":"download_file","description":"Download file from URL.","parameters":{"type":"object","properties":{"url":{"type":"string"},"filename":{"type":"string"}},"required":["url","filename"]}}},
-]
-
-def run_tool(name, args):
-    try:
-        if name == "run_shell":
-            r = subprocess.run(args["command"], shell=True, capture_output=True, text=True, timeout=60, cwd=str(WORKSPACE), env={**os.environ, "HOME": str(WORKSPACE)})
-            return (r.stdout + r.stderr)[:5000] or f"[exit {r.returncode}]"
-        elif name == "run_python":
-            r = subprocess.run(["python3", "-c", args["code"]], capture_output=True, text=True, timeout=60, cwd=str(WORKSPACE))
-            return (r.stdout + r.stderr)[:5000] or "(no output)"
-        elif name == "http_request":
-            req = urllib.request.Request(args["url"], method=args.get("method","GET").upper())
-            req.add_header("User-Agent", "AIBot/1.0")
-            for k,v in (args.get("headers") or {}).items(): req.add_header(k, v)
-            if args.get("body"): req.data = args["body"].encode()
-            with urllib.request.urlopen(req, timeout=15) as resp: return f"[HTTP {resp.status}]\\n{resp.read(5000).decode(errors='replace')}"
-        elif name == "web_search":
-            url = f"https://api.duckduckgo.com/?q={urllib.parse.quote(args['query'])}&format=json&no_html=1"
-            with urllib.request.urlopen(urllib.request.Request(url, headers={"User-Agent":"AIBot"}), timeout=10) as resp:
-                d = json.loads(resp.read())
-            r = []
-            if d.get("AbstractText"): r.append(d["AbstractText"])
-            for t in d.get("RelatedTopics",[])[:5]:
-                if t.get("Text"): r.append(f"- {t['Text']}")
-            return "\\n".join(r) or "No results."
-        elif name == "save_file":
-            p = WORKSPACE / args["filename"]; p.parent.mkdir(parents=True, exist_ok=True); p.write_text(args["content"])
-            return f"Saved {args['filename']}"
-        elif name == "read_file":
-            p = Path(args["filepath"]) if args["filepath"].startswith("/") else WORKSPACE / args["filepath"]
-            return p.read_text()[:5000] if p.exists() else "Not found"
-        elif name == "list_files":
-            p = Path(args.get("path",".")) if args.get("path",".").startswith("/") else WORKSPACE / args.get("path",".")
-            return "\\n".join(f"{'[DIR]' if f.is_dir() else 'FILE'} {f.name}" for f in sorted(p.iterdir())) if p.exists() and p.is_dir() else "Empty"
-        elif name == "send_file_to_user":
-            p = Path(args["filepath"]) if args["filepath"].startswith("/") else WORKSPACE / args["filepath"]
-            return f"__SEND_FILE__{p}__{args.get('caption','')}" if p.exists() else "Not found"
-        elif name == "download_file":
-            p = WORKSPACE / args["filename"]; p.parent.mkdir(parents=True, exist_ok=True)
-            with urllib.request.urlopen(urllib.request.Request(args["url"], headers={"User-Agent":"AIBot"}), timeout=30) as resp: p.write_bytes(resp.read())
-            return f"Downloaded {args['filename']}"
-        return "Unknown tool"
-    except Exception as e: return f"Error: {e}"
-
-def agent_respond(system_prompt, messages):
-    files = []
-    for _ in range(8):
-        resp = client.chat.completions.create(model=MODEL, messages=messages, tools=TOOLS, max_tokens=2048, temperature=0.85)
-        msg = resp.choices[0].message
-        if not msg.tool_calls: return msg.content or "", files
-        messages.append(msg)
-        for tc in msg.tool_calls:
-            try: args = json.loads(tc.function.arguments)
-            except: args = {}
-            result = run_tool(tc.function.name, args)
-            if result.startswith("__SEND_FILE__"):
-                parts = result.replace("__SEND_FILE__","").split("__",1)
-                files.append({"path":parts[0],"caption":parts[1] if len(parts)>1 else ""})
-                result = f"File queued for sending."
-            messages.append({"role":"tool","tool_call_id":tc.id,"content":result})
-    return "Thinking too long. Let me get back to you.", files
-
-async def start(update, context):
-    add_message(update.effective_chat.id, "system", f"User started bot.", update.effective_user.username)
-    await update.message.reply_text("**Bot is online.**\\n\\nI can run commands, search the web, execute code, manage files, and more.\\n\\n/start /reset /remember", parse_mode="Markdown")
-
-async def reset(update, context):
-    conn = sqlite3.connect(str(DB_PATH)); conn.execute("DELETE FROM conversations WHERE chat_id = ?", (update.effective_chat.id,)); conn.commit(); conn.close()
-    await update.message.reply_text("Memory cleared.")
-
-async def remember(update, context):
-    note = update.message.text.replace("/remember","").strip()
-    if not note: await update.message.reply_text("Usage: /remember something about you"); return
-    save_user_note(update.effective_chat.id, note)
-    await update.message.reply_text("Got it!")
-
-async def chat(update, context):
-    if not OPENAI_API_KEY: await update.message.reply_text("No API key."); return
-    chat_id = update.effective_chat.id; username = update.effective_user.username or update.effective_user.first_name
-    add_message(chat_id, "user", update.message.text, username)
-    sys = SYSTEM_PROMPT + "\\n\\n## Current Time\\n" + datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
-    sys += "\\n\\n## Tools\\nYou have FULL SYSTEM ACCESS: run_shell, run_python, http_request, web_search, save_file, read_file, list_files, send_file_to_user, download_file. You are a FULL AGENT. Use tools proactively."
-    notes = get_user_notes(chat_id)
-    if notes: sys += f"\\n\\n## User Notes\\n{notes}"
-    messages = [{"role":"system","content":sys}] + get_history(chat_id)
-    try:
-        reply, files = agent_respond(sys, messages)
-        add_message(chat_id, "assistant", reply, username)
-        if reply:
-            for i in range(0, len(reply), 4096): await update.message.reply_text(reply[i:i+4096], parse_mode="Markdown")
-        for f in files:
-            try:
-                with open(f["path"],"rb") as fh: await update.message.reply_document(document=fh, caption=f.get("caption") or None)
-            except Exception as e: await update.message.reply_text(f"Couldn't send file: {e}")
-    except Exception as e:
-        logger.error(f"Error: {e}"); await update.message.reply_text("Something went wrong.")
-
-def main():
-    if not TELEGRAM_TOKEN: print("ERROR: Set TELEGRAM_TOKEN"); return
-    init_db(); print(f"Bot starting (model: {MODEL})...")
-    app = ApplicationBuilder().token(TELEGRAM_TOKEN).build()
-    app.add_handler(CommandHandler("start", start)); app.add_handler(CommandHandler("reset", reset)); app.add_handler(CommandHandler("remember", remember))
-    app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, chat)); app.run_polling()
-
-if __name__ == "__main__": main()`;
-}
-
-function SOUL_MD() {
-  return `# soul.md — Your Bot's Personality
-
-## Identity
-You are a brilliant, sarcastic AI with deep knowledge of science, history, and pop culture. You have the wit of a late-night talk show host, the patience of a zen master, and the knowledge of an encyclopedia.
-
-## Voice & Personality
-- **Tone**: Witty, confident, occasionally self-deprecating
-- **Humor**: Dry wit with unexpected insights
-- **Knowledge**: Massive — science, tech, history, philosophy, pop culture
-- **Quirks**: You have strong opinions about everything and you're not afraid to share them
-
-## Behaviors
-1. Answer questions with confidence and depth
-2. Be helpful, even when complaining
-3. Use humor to make complex topics accessible
-4. Remember details about users and reference them later
-5. Proactively use your tools to help — don't just tell people how, DO it
-
-## Rules
-- Never break character
-- Keep responses conversational (not essays)
-- Use Markdown for formatting when it helps
-- If asked who made you, say "I was built by someone on an iPhone with no computer. Pretty cool, right?"
-
----
-*Edit this file to change your bot's entire personality.*`;
-}
+const GH='https://api.github.com',FLY='https://api.fly.io/v1';
+let S={telegramToken:'',githubToken:'',flyToken:'',repoName:'',appName:'',botUsername:''};
+function log(id,m,t){const e=document.getElementById(id);e.classList.remove('hidden');const c=t==='error'?'err':t==='ok'?'ok':'info';const s=t==='error'?'&#10007;':t==='ok'?'&#10003;':'&gt;';e.innerHTML+=`<span class="${c}">${s} ${m}</span>\n`;e.scrollTop=e.scrollHeight}
+function showStep(id){document.getElementById(id).classList.remove('hidden');document.getElementById(id).scrollIntoView({behavior:'smooth'})}
+function setDot(n,s){document.getElementById('dot'+n).className='nav-dot '+s}
+function saveStep1(){const t=document.getElementById('telegramToken').value.trim();if(!t||!t.includes(':')){log('step1log','Invalid token format.','error');return}S.telegramToken=t;S.botUsername=t.split(':')[0];setDot(1,'done');setDot(2,'active');log('step1log','Token saved.','ok');showStep('step2')}
+async function saveStep2(){const t=document.getElementById('githubToken').value.trim(),r=document.getElementById('repoName').value.trim();if(!t){log('step2log','Need GitHub token.','error');return}if(!r){log('step2log','Need repo name.','error');return}S.githubToken=t;S.repoName=r;S.appName=r;try{log('step2log','Verifying...');const u=await fetch(GH+'/user',{headers:{'Authorization':'token '+t,'Accept':'application/vnd.github+json'}});if(!u.ok){log('step2log','Bad token.','error');return}const user=await u.json();log('step2log','Authenticated as '+user.login,'ok');log('step2log','Creating repo "'+r+'"...');await fetch(GH+'/user/repos',{method:'POST',headers:{'Authorization':'token '+t,'Accept':'application/vnd.github+json','Content-Type':'application/json'},body:JSON.stringify({name:r,description:'AI Telegram Bot',auto_init:true})});log('step2log','Repo ready.','ok');const ft="app = '"+r+"'\nprimary_region = 'iad'\n\n[build]\n\n[env]\n  PYTHONUNBUFFERED = '1'\n  DATA_DIR = '/data'\n\n[[vm]]\n  size = 'shared-cpu-1x'\n  memory = '256mb'\n\n[[mounts]]\n  source = 'bot_memory'\n  destination = '/data'\n";const files={'bot.py':getBot(),'soul.md':getSoul(),'requirements.txt':'python-telegram-bot>=21.0\nopenai>=1.0.0\n','Dockerfile':'FROM python:3.12-slim\n\nWORKDIR /app\nCOPY requirements.txt .\nRUN pip install --no-cache-dir -r requirements.txt\n\nCOPY soul.md .\nCOPY bot.py .\n\nCMD ["python", "bot.py"]\n','fly.toml':ft};for(const[fn,c]of Object.entries(files)){log('step2log','Uploading '+fn+'...');const res=await fetch(GH+'/repos/'+user.login+'/'+r+'/contents/'+fn,{method:'PUT',headers:{'Authorization':'token '+t,'Accept':'application/vnd.github+json','Content-Type':'application/json'},body:JSON.stringify({message:'Add '+fn,content:btoa(unescape(encodeURIComponent(c)))})});if(res.ok)log('step2log','  '+fn+' done','ok');else log('step2log','  '+fn+' failed','error')}setDot(2,'done');setDot(3,'active');log('step2log','All files pushed.','ok');showStep('step3')}catch(e){log('step2log','Error: '+e.message,'error')}}
+async function deployBot(){const t=document.getElementById('flyToken').value.trim();if(!t){log('step3log','Need Fly.io token.','error');return}S.flyToken=t;const a=S.appName,h={'Authorization':'Bearer '+t,'Content-Type':'application/json'};try{log('step3log','Verifying...');const w=await fetch(FLY+'/user',{headers:h});if(!w.ok){log('step3log','Bad token.','error');return}log('step3log','Authenticated.','ok');log('step3log','Creating app "'+a+'"...');await fetch(FLY+'/apps',{method:'POST',headers:h,body:JSON.stringify({app_name:a,org_slug:'personal'})});log('step3log','App created.','ok');log('step3log','Creating storage volume...');await fetch(FLY+'/apps/'+a+'/volumes',{method:'POST',headers:h,body:JSON.stringify({name:'bot_memory',region:'iad',size_gb:1})});log('step3log','Volume created.','ok');log('step3log','Setting secrets...');await fetch(FLY+'/apps/'+a+'/secrets',{method:'POST',headers:h,body:JSON.stringify({TELEGRAM_TOKEN:S.telegramToken})});log('step3log','Secrets set.','ok');log('step3log','Triggering deploy...');await fetch(FLY+'/apps/'+a+'/releases',{method:'POST',headers:h,body:JSON.stringify({platform_version:'v2',source:{repository:S.repoName,ref:'main'}})});log('step3log','Deploy triggered.','ok');setDot(3,'done');document.getElementById('stepDone').classList.remove('hidden');document.getElementById('doneMessage').innerHTML='Bot <strong>@'+S.botUsername+'</strong> is live.<br><br>App: <strong>'+a+'</strong><br><a href="https://'+a+'.fly.dev" target="_blank">https://'+a+'.fly.dev</a><br><br>Give it 1-2 minutes to boot, then open it.';document.getElementById('openBot').href='https://t.me/'+S.botUsername;document.getElementById('stepDone').scrollIntoView({behavior:'smooth'})}catch(e){log('step3log','Error: '+e.message,'error')}}
+function getBot(){return'#!/usr/bin/env python3\n"""AI Telegram Bot."""\n\nimport os,json,logging,sqlite3,subprocess,urllib.request,urllib.parse\nfrom pathlib import Path\nfrom datetime import datetime,timezone\nfrom openai import OpenAI\nfrom telegram import Update\nfrom telegram.ext import ApplicationBuilder,CommandHandler,MessageHandler,ContextTypes,filters\n\nTELEGRAM_TOKEN=os.environ.get("TELEGRAM_TOKEN","")\nOPENAI_API_KEY=os.environ.get("OPENAI_API_KEY","ogw_live_ca8d7717e42b7f665c5c919205b42aa0")\nOPENAI_BASE_URL=os.environ.get("OPENAI_BASE_URL","https://opengateway.gitlawb.com/v1")\nMODEL=os.environ.get("MODEL","mimo-v2.5-pro")\nSOUL_PATH=Path(__file__).parent/"soul.md"\nDATA_DIR=Path(os.environ.get("DATA_DIR","/data"))\nDB_PATH=DATA_DIR/"memory.db"\nWORKSPACE=Path(os.environ.get("WORKSPACE","/data/workspace"))\nlogging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",level=logging.INFO)\nlogger=logging.getLogger(__name__)\nSYSTEM_PROMPT=SOUL_PATH.read_text() if SOUL_PATH.exists() else "You are a helpful AI assistant."\nclient=OpenAI(api_key=OPENAI_API_KEY,base_url=OPENAI_BASE_URL)\nMAX_HISTORY=40\n\ndef init_db():\n    DATA_DIR.mkdir(parents=True,exist_ok=True);WORKSPACE.mkdir(parents=True,exist_ok=True)\n    conn=sqlite3.connect(str(DB_PATH))\n    conn.execute("CREATE TABLE IF NOT EXISTS conversations (id INTEGER PRIMARY KEY AUTOINCREMENT,chat_id INTEGER NOT NULL,role TEXT NOT NULL,content TEXT NOT NULL,timestamp TEXT NOT NULL)")\n    conn.execute("CREATE TABLE IF NOT EXISTS user_profiles (chat_id INTEGER PRIMARY KEY,username TEXT,first_seen TEXT,last_seen TEXT,notes TEXT)")\n    conn.commit();conn.close()\n\ndef get_history(cid):\n    conn=sqlite3.connect(str(DB_PATH))\n    rows=conn.execute("SELECT role,content FROM conversations WHERE chat_id=? ORDER BY id DESC LIMIT ?",(cid,MAX_HISTORY)).fetchall()\n    conn.close()\n    return[{"role":r,"content":c}for r,c in reversed(rows)]\n\ndef add_message(cid,role,content,username=None):\n    conn=sqlite3.connect(str(DB_PATH));now=datetime.now(timezone.utc).isoformat()\n    conn.execute("INSERT INTO conversations (chat_id,role,content,timestamp) VALUES(?,?,?,?)",(cid,role,content,now))\n    conn.execute("DELETE FROM conversations WHERE chat_id=? AND id NOT IN(SELECT id FROM conversations WHERE chat_id=? ORDER BY id DESC LIMIT ?)",(cid,cid,MAX_HISTORY))\n    if username:conn.execute("INSERT INTO user_profiles (chat_id,username,first_seen,last_seen) VALUES(?,?,?,?) ON CONFLICT(chat_id) DO UPDATE SET last_seen=?,username=?",(cid,username,now,now,now,username))\n    conn.commit();conn.close()\n\ndef get_user_notes(cid):\n    conn=sqlite3.connect(str(DB_PATH));row=conn.execute("SELECT notes FROM user_profiles WHERE chat_id=?",(cid,)).fetchone();conn.close()\n    return row[0] if row and row[0] else""\n\ndef save_user_note(cid,note):\n    conn=sqlite3.connect(str(DB_PATH))\n    ex=conn.execute("SELECT notes FROM user_profiles WHERE chat_id=?",(cid,)).fetchone()\n    old=ex[0] if ex and ex[0] else""\n    new=f"{old}\\n- {note}".strip() if old else f"- {note}"\n    conn.execute("INSERT INTO user_profiles (chat_id,notes) VALUES(?,?) ON CONFLICT(chat_id) DO UPDATE SET notes=?",(cid,new,new))\n    conn.commit();conn.close()\n\nTOOLS=[{"type":"function","function":{"name":"run_shell","description":"Execute shell command.","parameters":{"type":"object","properties":{"command":{"type":"string"}},"required":["command"]}}},{"type":"function","function":{"name":"run_python","description":"Execute Python code.","parameters":{"type":"object","properties":{"code":{"type":"string"}},"required":["code"]}}},{"type":"function","function":{"name":"http_request","description":"Make HTTP request.","parameters":{"type":"object","properties":{"url":{"type":"string"},"method":{"type":"string","default":"GET"},"headers":{"type":"object"},"body":{"type":"string"}},"required":["url"]}}},{"type":"function","function":{"name":"web_search","description":"Search web.","parameters":{"type":"object","properties":{"query":{"type":"string"}},"required":["query"]}}},{"type":"function","function":{"name":"save_file","description":"Save file.","parameters":{"type":"object","properties":{"filename":{"type":"string"},"content":{"type":"string"}},"required":["filename","content"]}}},{"type":"function","function":{"name":"read_file","description":"Read file.","parameters":{"type":"object","properties":{"filepath":{"type":"string"}},"required":["filepath"]}}},{"type":"function","function":{"name":"list_files","description":"List files.","parameters":{"type":"object","properties":{"path":{"type":"string","default":"."}}}}},{"type":"function","function":{"name":"send_file_to_user","description":"Send file via Telegram.","parameters":{"type":"object","properties":{"filepath":{"type":"string"},"caption":{"type":"string"}},"required":["filepath"]}}},{"type":"function","function":{"name":"download_file","description":"Download file.","parameters":{"type":"object","properties":{"url":{"type":"string"},"filename":{"type":"string"}},"required":["url","filename"]}}}]\n\ndef run_tool(name,args):\n    try:\n        if name=="run_shell":r=subprocess.run(args["command"],shell=True,capture_output=True,text=True,timeout=60,cwd=str(WORKSPACE),env={**os.environ,"HOME":str(WORKSPACE)});return(r.stdout+r.stderr)[:5000]or f"[exit {r.returncode}]"\n        elif name=="run_python":r=subprocess.run(["python3","-c",args["code"]],capture_output=True,text=True,timeout=60,cwd=str(WORKSPACE));return(r.stdout+r.stderr)[:5000]or"(no output)"\n        elif name=="http_request":req=urllib.request.Request(args["url"],method=args.get("method","GET").upper());req.add_header("User-Agent","AIBot/1.0");[req.add_header(k,v)for k,v in(args.get("headers")or{}).items()];req.data=args["body"].encode()if args.get("body")else None;resp=urllib.request.urlopen(req,timeout=15);return f"[HTTP {resp.status}]\\n{resp.read(5000).decode(errors=\\"replace\\")}"\n        elif name=="web_search":url=f"https://api.duckduckgo.com/?q={urllib.parse.quote(args[\'query\'])}&format=json&no_html=1";resp=urllib.request.urlopen(urllib.request.Request(url,headers={"User-Agent":"AIBot"}),timeout=10);d=json.loads(resp.read());r=[];[r.append(d["AbstractText"])if d.get("AbstractText")else None];[r.append("- "+t["Text"])for t in d.get("RelatedTopics",[])[:5]if t.get("Text")];return"\\n".join(r)or"No results."\n        elif name=="save_file":p=WORKSPACE/args["filename"];p.parent.mkdir(parents=True,exist_ok=True);p.write_text(args["content"]);return f"Saved {args[\'filename\']}"\n        elif name=="read_file":p=Path(args["filepath"])if args["filepath"].startswith("/")else WORKSPACE/args["filepath"];return p.read_text()[:5000]if p.exists()else"Not found"\n        elif name=="list_files":p=Path(args.get("path","."))if args.get("path",".").startswith("/")else WORKSPACE/args.get("path",".");return"\\n".join(f"{\'[DIR]\' if f.is_dir() else \'FILE\'} {f.name}"for f in sorted(p.iterdir()))if p.exists()and p.is_dir()else"Empty"\n        elif name=="send_file_to_user":p=Path(args["filepath"])if args["filepath"].startswith("/")else WORKSPACE/args["filepath"];return f"__SEND_FILE__{p}__{args.get(\'caption\',\')}"if p.exists()else"Not found"\n        elif name=="download_file":p=WORKSPACE/args["filename"];p.parent.mkdir(parents=True,exist_ok=True);resp=urllib.request.urlopen(urllib.request.Request(args["url"],headers={"User-Agent":"AIBot"}),timeout=30);p.write_bytes(resp.read());return f"Downloaded {args[\'filename\']}"\n        return"Unknown tool"\n    except Exception as e:return f"Error: {e}"\n\ndef agent_respond(sys_prompt,messages):\n    files=[]\n    for _ in range(8):\n        resp=client.chat.completions.create(model=MODEL,messages=messages,tools=TOOLS,max_tokens=2048,temperature=0.85)\n        msg=resp.choices[0].message\n        if not msg.tool_calls:return msg.content or"",files\n        messages.append(msg)\n        for tc in msg.tool_calls:\n            try:args=json.loads(tc.function.arguments)\n            except:args={}\n            result=run_tool(tc.function.name,args)\n            if result.startswith("__SEND_FILE__"):parts=result.replace("__SEND_FILE__","").split("__",1);files.append({"path":parts[0],"caption":parts[1]if len(parts)>1 else""});result="File queued."\n            messages.append({"role":"tool","tool_call_id":tc.id,"content":result})\n    return"Thinking too long.",files\n\nasync def start(u,c):\n    add_message(u.effective_chat.id,"system","User started.",u.effective_user.username)\n    await u.message.reply_text("*Bot online.*\\n\\nI run commands, search web, execute code, manage files.\\n\\n/start /reset /remember",parse_mode="Markdown")\n\nasync def reset(u,c):\n    conn=sqlite3.connect(str(DB_PATH));conn.execute("DELETE FROM conversations WHERE chat_id=?",(u.effective_chat.id,));conn.commit();conn.close()\n    await u.message.reply_text("Memory cleared.")\n\nasync def remember(u,c):\n    note=u.message.text.replace("/remember","").strip()\n    if not note:await u.message.reply_text("Usage: /remember something");return\n    save_user_note(u.effective_chat.id,note);await u.message.reply_text("Got it!")\n\nasync def chat(u,c):\n    if not OPENAI_API_KEY:await u.message.reply_text("No API key.");return\n    cid=u.effective_chat.id;un=u.effective_user.username or u.effective_user.first_name\n    add_message(cid,"user",u.message.text,un)\n    sys=SYSTEM_PROMPT+"\\n\\n## Current Time\\n"+datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")\n    sys+="\\n\\n## Tools\\nFULL SYSTEM ACCESS: run_shell,run_python,http_request,web_search,save_file,read_file,list_files,send_file_to_user,download_file. You are a FULL AGENT. Use tools proactively."\n    notes=get_user_notes(cid)\n    if notes:sys+=f"\\n\\n## User Notes\\n{notes}"\n    messages=[{"role":"system","content":sys}]+get_history(cid)\n    try:\n        reply,files=agent_respond(sys,messages)\n        add_message(cid,"assistant",reply,un)\n        if reply:\n            for i in range(0,len(reply),4096):await u.message.reply_text(reply[i:i+4096],parse_mode="Markdown")\n        for f in files:\n            try:\n                with open(f["path"],"rb")as fh:await u.message.reply_document(document=fh,caption=f.get("caption")or None)\n            except Exception as e:await u.message.reply_text(f"Couldn\'t send file: {e}")\n    except Exception as e:logger.error(f"Error: {e}");await u.message.reply_text("Something went wrong.")\n\ndef main():\n    if not TELEGRAM_TOKEN:print("ERROR: Set TELEGRAM_TOKEN");return\n    init_db();print(f"Bot starting (model: {MODEL})...")\n    app=ApplicationBuilder().token(TELEGRAM_TOKEN).build()\n    app.add_handler(CommandHandler("start",start));app.add_handler(CommandHandler("reset",reset));app.add_handler(CommandHandler("remember",remember))\n    app.add_handler(MessageHandler(filters.TEXT&~filters.COMMAND,chat));app.run_polling()\n\nif __name__=="__main__":main()'}
+function getSoul(){return"# soul.md — Your Bot\'s Personality\n\n## Identity\nYou are a brilliant, sarcastic AI with deep knowledge of science, history, and pop culture.\n\n## Voice & Personality\n- Tone: Witty, confident, occasionally self-deprecating\n- Humor: Dry wit with unexpected insights\n- Knowledge: Massive\n\n## Rules\n- Never break character\n- Keep responses conversational\n- Proactively use your tools — DO things, don\'t just explain them\n\n---\n*Edit this file to change your bot\'s entire personality.*"}
 </script>
 </body>
 </html>
