@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Grandpa Dregs Telegram Bot — powered by OpenGateway (mimo-v2.5-pro) + soul.md personality."""
+"""Grandpa Dregs Telegram Bot — OpenAI-compatible endpoint + soul.md personality."""
 
 import os
 import re
@@ -24,8 +24,8 @@ from telegram.ext import (
 # --- Config ---
 TELEGRAM_TOKEN = os.environ.get("TELEGRAM_TOKEN", "")
 OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY", "")
-OPENAI_BASE_URL = os.environ.get("OPENAI_BASE_URL", "https://opengateway.gitlawb.com/v1")
-MODEL = os.environ.get("MODEL", "mimo-v2.5-pro")
+OPENAI_BASE_URL = os.environ.get("OPENAI_BASE_URL", "https://api.groq.com/openai/v1")
+MODEL = os.environ.get("MODEL", "llama-3.3-70b-versatile")
 SOUL_PATH = Path(__file__).parent / "soul.md"
 
 # --- Logging ---
@@ -38,12 +38,12 @@ logger = logging.getLogger(__name__)
 # --- Load soul ---
 SYSTEM_PROMPT = SOUL_PATH.read_text() if SOUL_PATH.exists() else "You are Grandpa Dregs."
 
-# --- OpenAI-compatible client (pointed at OpenGateway) ---
+# --- OpenAI-compatible client ---
 client = OpenAI(api_key=OPENAI_API_KEY, base_url=OPENAI_BASE_URL)
 
-# --- Conversation memory (persistent SQLite) ---
+# --- Conversation memory (SQLite) ---
 MAX_HISTORY = 20
-DB_PATH = Path(os.environ.get("DB_PATH", "/data/memory.db"))
+DB_PATH = Path(os.environ.get("DB_PATH", "/tmp/grandpa-dregs/memory.db"))
 
 
 def init_db():
@@ -104,16 +104,16 @@ def save_user_note(chat_id, note):
     conn.close()
 
 
-# --- Tools ---
+# --- Tools (function-calling) ---
 TOOLS = [
     {"type": "function", "function": {"name": "run_shell", "description": "Execute shell command.", "parameters": {"type": "object", "properties": {"command": {"type": "string"}}, "required": ["command"]}}},
     {"type": "function", "function": {"name": "run_python", "description": "Execute Python code.", "parameters": {"type": "object", "properties": {"code": {"type": "string"}}, "required": ["code"]}}},
-    {"type": "function", "function": {"name": "http_request", "description": "Make HTTP request.", "parameters": {"type": "object", "properties": {"url": {"type": "string"}, "method": {"type": "string", "default": "GET"}, "headers": {"type": "object"}, "body": {"type": "string"}}, "required": ["url"]}}},
-    {"type": "function", "function": {"name": "web_search", "description": "Search web via DuckDuckGo.", "parameters": {"type": "object", "properties": {"query": {"type": "string"}}, "required": ["query"]}}},
-    {"type": "function", "function": {"name": "save_file", "description": "Save file to workspace.", "parameters": {"type": "object", "properties": {"filename": {"type": "string"}, "content": {"type": "string"}}, "required": ["filename", "content"]}}},
-    {"type": "function", "function": {"name": "read_file", "description": "Read file from workspace.", "parameters": {"type": "object", "properties": {"filepath": {"type": "string"}}, "required": ["filepath"]}}},
+    {"type": "function", "function": {"name": "http_request", "description": "Make HTTP request.", "parameters": {"type": "object", "properties": {"url": {"": "string"}, "method": {"": "string", "default": "GET"}, "headers": {"": "object"}, "body": {"": "string"}}, "required": ["url"]}}},
+    {"type": "function", "function": {"name": "web_search", "description": "Search web via DuckDuckGo.", "parameters": {"type": "object", "properties": {"query": {"": "string"}}, "required": ["query"]}}},
+    {"type": "function", "function": {"name": "save_file", "description": "Save file to workspace.", "parameters": {"type": "object", "properties": {"filename": {"": "string"}, "content": {"": "string"}}, "required": ["filename", "content"]}}},
+    {"type": "function", "function": {"name": "read_file", "description": "Read file from workspace.", "parameters": {"type": "object", "properties": {"filepath": {"": "string"}}, "required": ["filepath"]}}},
     {"type": "function", "function": {"name": "list_files", "description": "List files in directory.", "parameters": {"type": "object", "properties": {"path": {"": "string", "default": "."}}}}},
-    {"type": "function", "function": {"name": "download_file", "description": "Download file from URL.", "parameters": {"type": "object", "properties": {"url": {"type": "string"}, "filename": {"": "string"}}, "required": ["url", "filename"]}}},
+    {"type": "function", "function": {"name": "download_file", "description": "Download file from URL.", "parameters": {"type": "object", "properties": {"url": {"": "string"}, "filename": {"": "string"}}, "required": ["url", "filename"]}}},
 ]
 
 
@@ -197,7 +197,7 @@ def agent_respond(messages):
     return "Thinking too long.", files
 
 
-# --- MarkdownV2 escaping for safe Telegram formatting ---
+# --- MarkdownV2 escaping ---
 _MDV2_SPECIAL = re.compile(r"([_*\[\]()~`>#+\-=|{}.!\\])")
 
 
@@ -241,72 +241,77 @@ async def reset(update: Update, context: ContextTypes.DEFAULT_TYPE):
     conn.execute("DELETE FROM conversations WHERE chat_id=?", (chat_id,))
     conn.commit()
     conn.close()
-    await update.message.reply_text(
-        "Memory wiped. Clean slate. "
-        "Like a fresh holodeck program — "
-        "let's hope this one doesn't become sentient."
-    )
+    await _safe_reply(update, "*Memory wiped.* What did I just say? Kidding. I'm ready for round two.")
 
 
 async def remember(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    note = update.message.text.replace("/remember", "", 1).strip()
-    if not note:
-        await update.message.reply_text("Usage: /remember something to remember")
-        return
-    save_user_note(update.effective_chat.id, note)
-    await update.message.reply_text("Noted. I'll remember that.")
-
-
-async def chat(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    if not OPENAI_API_KEY:
-        await update.message.reply_text(
-            "No API key configured. "
-            "Even I can't think without fuel, kid."
-        )
-        return
-
     chat_id = update.effective_chat.id
-    user_message = update.message.text
+    note = " ".join(context.args) if context.args else ""
+    if not note:
+        await _safe_reply(update, "Use /remember <text> — give me something worth remembering.")
+        return
+    save_user_note(chat_id, note)
+    await _safe_reply(update, f"*Noted.* {note}")
 
-    add_message(chat_id, "user", user_message)
 
-    sys = SYSTEM_PROMPT + "\n\n## Current Time\n" + datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
-    sys += "\n\n## Tools\nFULL SYSTEM ACCESS: run_shell, run_python, http_request, web_search, save_file, read_file, list_files, download_file. You are a FULL AGENT. Use tools proactively to help the user."
+async def _show_notes(update, chat_id):
     notes = get_user_notes(chat_id)
+    if not notes:
+        await _safe_reply(update, "No notes yet. /remember <text> to add one.")
+        return
+    await _safe_reply(update, f"*What I know about you:*\n{notes}")
+
+
+async def status(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await _safe_reply(
+        update,
+        f"*Grandpa Dregs status*\n"
+        f"Model: {MODEL}\n"
+        f"Endpoint: {OPENAI_BASE_URL}\n"
+        f"Memory: {len(get_history(update.effective_chat.id))} msgs stored",
+    )
+
+
+async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    if not update.message or not update.message.text:
+        return
+    chat_id = update.effective_chat.id
+    user_text = update.message.text
+    add_message(chat_id, "user", user_text)
+    history = get_history(chat_id)
+    notes = get_user_notes(chat_id)
+    system = SYSTEM_PROMPT
     if notes:
-        sys += f"\n\n## User Notes\n{notes}"
-
-    messages = [{"role": "system", "content": sys}] + get_history(chat_id)
-
+        system += f"\n\n## Notes about this user\n{notes}"
+    messages = [{"role": "system", "content": system}] + history
     try:
-        reply, files = agent_respond(messages)
-        add_message(chat_id, "assistant", reply or "")
-        await _safe_reply(update, reply)
-        for f in files:
-            try:
-                with open(f["path"], "rb") as fh:
-                    await update.message.reply_document(document=fh, caption=f.get("caption") or None)
-            except Exception as e:
-                await update.message.reply_text(f"Couldn't send file: {type(e).__name__}: {e}")
+        await update.message.chat.send_action("typing")
+    except Exception:
+        pass
+    try:
+        text, _files = agent_respond(messages)
     except Exception as e:
-        logger.error("chat() error", exc_info=True)
-        await update.message.reply_text(
-            f"Something went wrong. (Error class: {type(e).__name__}) — see bot logs."
-        )
+        logger.exception("LLM call failed")
+        text = f"Model unavailable: {type(e).__name__}: {e}"
+    add_message(chat_id, "assistant", text)
+    await _safe_reply(update, text)
 
 
 def main():
-    if not TELEGRAM_TOKEN:
-        print("ERROR: Set TELEGRAM_TOKEN")
-        return
     init_db()
-    print(f"Bot starting (model: {MODEL})...")
+    if not TELEGRAM_TOKEN:
+        raise RuntimeError("TELEGRAM_TOKEN not set")
+    if not OPENAI_API_KEY:
+        raise RuntimeError("OPENAI_API_KEY not set")
+    logger.info(f"Bot starting. Model={MODEL} Endpoint={OPENAI_BASE_URL}")
     app = ApplicationBuilder().token(TELEGRAM_TOKEN).build()
     app.add_handler(CommandHandler("start", start))
     app.add_handler(CommandHandler("reset", reset))
     app.add_handler(CommandHandler("remember", remember))
-    app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, chat))
-    app.run_polling()
+    app.add_handler(CommandHandler("notes", lambda u, c: _show_notes(u, u.effective_chat.id)))
+    app.add_handler(CommandHandler("status", status))
+    app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
+    app.run_polling(allowed_updates=Update.ALL_TYPES)
 
 
 if __name__ == "__main__":
