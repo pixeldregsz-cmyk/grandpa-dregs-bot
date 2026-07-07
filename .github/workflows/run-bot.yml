@@ -1,0 +1,42 @@
+name: run-bot
+
+on:
+  workflow_dispatch:
+    inputs:
+      duration_hours:
+        description: "Max runtime in hours (1-6)"
+        required: false
+        default: "4"
+        type: choice
+        options:
+          - "1"
+          - "2"
+          - "3"
+          - "4"
+          - "5"
+          - "6"
+
+jobs:
+  bot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      - name: Run bot
+        env:
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          OPENAI_BASE_URL: ${{ secrets.OPENAI_BASE_URL }}
+          MODEL: ${{ secrets.MODEL }}
+          DB_PATH: /tmp/grandpa-dregs/memory.db
+        run: |
+          mkdir -p /tmp/grandpa-dregs
+          python bot.py
